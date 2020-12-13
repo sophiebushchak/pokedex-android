@@ -7,4 +7,29 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!--PokeData Light Theme Colors-->
+    <color name="pokered">#de4d49</color>
+
+    <!--Pokemon Types-->
+    <color name="pokemon_type_normal">#aaaa9a</color>
+    <color name="pokemon_type_fire">#ff5131</color>
+    <color name="pokemon_type_water">#3c95fb</color>
+    <color name="pokemon_type_electric">#fecf48</color>
+    <color name="pokemon_type_grass">#71CC5D</color>
+    <color name="pokemon_type_ice">#67C9FC</color>
+    <color name="pokemon_type_fighting">#BC5B49</color>
+    <color name="pokemon_type_poison">#AC5798</color>
+    <color name="pokemon_type_ground">#DCBD5E</color>
+    <color name="pokemon_type_flying">#8C96FB</color>
+    <color name="pokemon_type_psychic">#8C96FB</color>
+    <color name="pokemon_type_bug">#A8BC36</color>
+    <color name="pokemon_type_rock">#BAAB6B</color>
+    <color name="pokemon_type_ghost">#6963B8</color>
+    <color name="pokemon_type_dragon">#7C61EA</color>
+    <color name="pokemon_type_dark">#775646</color>
+    <color name="pokemon_type_steel">#AAAABA</color>
+    <color name="pokemon_type_fairy">#F19AEC</color>
+
+
 </resources>
