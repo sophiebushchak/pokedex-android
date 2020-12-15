@@ -7,6 +7,4 @@ data class PokemonTest(
         val pokedexNumber: Int,
         val types: List<String>,
         val image: Int
-
-
 )

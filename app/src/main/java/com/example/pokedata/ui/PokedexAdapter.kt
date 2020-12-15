@@ -39,7 +39,6 @@ class PokedexAdapter(private val backlog: List<PokemonTest>) : RecyclerView.Adap
         fun databind(pokemon: PokemonTest) {
             itemView.tvPokemonName.text = pokemon.name
             itemView.tvPokemonNumber.text = "#00${pokemon.pokedexNumber}"
-            itemView.ivPokemonImage.setImageResource(R.drawable.ic_action_name)
         }
     }
 }
