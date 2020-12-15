@@ -12,15 +12,10 @@ interface PokeApiService {
     @GET("pokedex/national")
     suspend fun getNationalPokedex(): PokedexResource
 
-    @GET("pokemon/")
-    suspend fun getAllPokemon(@Query("limit") limit: Int)
-
     @GET("pokemon/{id}")
     suspend fun getPokemonById(@Path("id") id: Int): PokemonResource
 
     @GET("pokemon-species/{name}")
     suspend fun getPokemonSpeciesByName(@Path("name") name: String): PokemonSpeciesResource
 
-    @GET("generation/{name}")
-    suspend fun getGenerationByName(@Path("name") name: String)
 }

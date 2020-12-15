@@ -6,19 +6,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pokedata.R
-import com.example.pokedata.models.PokemonTest
-import com.example.pokedata.vm.PokeDexRetrieveViewModel
+import com.example.pokedata.rest.pokedex.PokemonResource
+import com.example.pokedata.vm.PokedexViewModel
 import kotlinx.android.synthetic.main.fragment_pokedex.*
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
 class PokeDexFragment : Fragment() {
-    private val pokemon = arrayListOf<PokemonTest>()
+    private val pokemon = arrayListOf<PokemonResource>()
     private val pokedexAdapter = PokedexAdapter(pokemon)
+    private val viewModel: PokedexViewModel by activityViewModels()
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -30,13 +32,26 @@ class PokeDexFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        pokemon.add(PokemonTest("Bulbasaur", 1, listOf("Grass"), R.drawable.ic_launcher_background))
         initViews()
+        observePokedexPagination()
+        viewModel.getPokedexNextPage()
     }
 
     private fun initViews() {
         val gridlLayoutManager = GridLayoutManager(context, 2, RecyclerView.VERTICAL, false)
         rvPokedex.layoutManager = gridlLayoutManager
         rvPokedex.adapter = pokedexAdapter
+    }
+
+    private fun observePokedexPagination() {
+        viewModel.pokemonOnPage.observe(viewLifecycleOwner, { pokemon ->
+            println("Received Pokemon LiveData")
+            println(pokemon)
+            if (pokemon != null) {
+                this.pokemon.clear()
+                this.pokemon.addAll(pokemon)
+                pokedexAdapter.notifyDataSetChanged()
+            }
+        })
     }
 }
