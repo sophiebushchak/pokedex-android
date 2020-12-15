@@ -5,10 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pokedata.R
 import com.example.pokedata.models.PokemonTest
+import com.example.pokedata.vm.PokeDexRetrieveViewModel
 import kotlinx.android.synthetic.main.fragment_pokedex.*
 
 /**
