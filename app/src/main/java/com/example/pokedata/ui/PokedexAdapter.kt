@@ -42,7 +42,7 @@ class PokedexAdapter(private val pokemonList: List<PokemonResource>) : RecyclerV
         fun databind(pokemon: PokemonResource) {
             Glide.with(context).load(pokemon.sprites.front_default).into(itemView.ivPokemonImage)
             itemView.tvPokemonName.text = pokemon.name
-            itemView.tvPokemonNumber.text = "#00${pokemon.id}"
+            itemView.tvPokemonNumber.text = "#${pokemon.id.toString().padStart(3, '0')}"
         }
     }
 }

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pokedata.R
 import com.example.pokedata.rest.pokedex.PokemonResource
+import com.example.pokedata.utils.EndlessRecyclerViewScroll
 import com.example.pokedata.vm.PokedexViewModel
 import kotlinx.android.synthetic.main.fragment_pokedex.*
 
@@ -41,6 +42,11 @@ class PokeDexFragment : Fragment() {
         val gridlLayoutManager = GridLayoutManager(context, 2, RecyclerView.VERTICAL, false)
         rvPokedex.layoutManager = gridlLayoutManager
         rvPokedex.adapter = pokedexAdapter
+        rvPokedex.addOnScrollListener(EndlessRecyclerViewScroll { getNextPage() })
+    }
+
+    private fun getNextPage() {
+        this.viewModel.getPokedexNextPage()
     }
 
     private fun observePokedexPagination() {

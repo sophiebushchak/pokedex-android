@@ -12,11 +12,11 @@ import kotlin.properties.Delegates
 
 class PokedexViewModel(application: Application) : AndroidViewModel(application) {
     var totalPokemonCount: Int? = null
-    var offset: Int = 1
-    private val perPage: Int = 50
-    private val pokeApiRepository = PokeApiRepository()
+    var offset: Int = 0
+    private val perPage: Int = 40
+    private val currentPokemonLoaded = mutableListOf<PokemonResource>()
 
-    val progressCount = pokeApiRepository.progressCount
+    private val pokeApiRepository = PokeApiRepository()
 
     private val _pokemonOnPage = MutableLiveData<MutableList<PokemonResource>>()
     val pokemonOnPage: LiveData<MutableList<PokemonResource>> get() = _pokemonOnPage
@@ -27,12 +27,9 @@ class PokedexViewModel(application: Application) : AndroidViewModel(application)
                 if (totalPokemonCount == null) {
                     totalPokemonCount = pokeApiRepository.getPokemonLimit()
                 }
-                val pokemon = mutableListOf<PokemonResource>()
-                pokemon.addAll(pokeApiRepository.getPokemonPaginated(offset+perPage, offset))
+                currentPokemonLoaded.addAll(pokeApiRepository.getPokemonPaginated(offset+perPage, offset))
                 offset += perPage;
-                println(pokemon)
-                _pokemonOnPage.value = pokemon
-
+                _pokemonOnPage.value = currentPokemonLoaded
             } catch (error: PokeApiRepository.PokeApiError) {
                 println(error)
             }

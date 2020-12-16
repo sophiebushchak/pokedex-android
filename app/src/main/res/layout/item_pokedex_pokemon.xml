@@ -23,10 +23,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:textAlignment="center"
+            android:textAlignment="textStart"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
             android:textColor="@color/design_default_color_on_primary"
             android:textSize="18sp"
+            app:layout_constraintEnd_toStartOf="@+id/tvPokemonNumber"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Bulbasaur" />

@@ -28,7 +28,7 @@ class PokeApiRepository {
     suspend fun getPokemonPaginated(limit: Int, offset: Int): List<PokemonResource> {
         try {
             val pokemonRetrieved = mutableListOf<PokemonResource>()
-            for (i in offset..limit) {
+            for (i in offset+1..limit) {
                 val pokemon = withTimeout(5_000) { pokeApiService.getPokemonById(i) }
                 pokemonRetrieved.add(pokemon)
             }
