@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AbsListView
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
@@ -22,6 +23,8 @@ class PokeDexFragment : Fragment() {
     private val pokemon = arrayListOf<PokemonResource>()
     private val pokedexAdapter = PokedexAdapter(pokemon)
     private val viewModel: PokedexViewModel by activityViewModels()
+
+    private lateinit var endlessScrollListener: EndlessRecyclerViewScroll
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -42,10 +45,12 @@ class PokeDexFragment : Fragment() {
         val gridlLayoutManager = GridLayoutManager(context, 2, RecyclerView.VERTICAL, false)
         rvPokedex.layoutManager = gridlLayoutManager
         rvPokedex.adapter = pokedexAdapter
-        rvPokedex.addOnScrollListener(EndlessRecyclerViewScroll { getNextPage() })
+        endlessScrollListener = EndlessRecyclerViewScroll({ getNextPage() }, true)
+        rvPokedex.addOnScrollListener(endlessScrollListener)
     }
 
     private fun getNextPage() {
+        println("Loading next page!")
         this.viewModel.getPokedexNextPage()
     }
 
@@ -58,6 +63,9 @@ class PokeDexFragment : Fragment() {
                 this.pokemon.addAll(pokemon)
                 pokedexAdapter.notifyDataSetChanged()
             }
+        })
+        viewModel.canGoNextPage.observe(viewLifecycleOwner, {
+            endlessScrollListener.canCall = it
         })
     }
 }

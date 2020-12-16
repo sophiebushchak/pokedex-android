@@ -7,13 +7,15 @@ import androidx.recyclerview.widget.RecyclerView
  * @param onReachBottom: Pass a lambda function that can be triggered when the RecyclerView can no
  * longer scroll downwards vertically.
  */
-class EndlessRecyclerViewScroll(private val onReachBottom: () -> Unit): RecyclerView.OnScrollListener() {
+class EndlessRecyclerViewScroll(private val onReachBottom: () -> Unit, var canCall: Boolean): RecyclerView.OnScrollListener() {
     @Override
     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
         super.onScrolled(recyclerView, dx, dy)
-        val directionDown = 1;
-        if (!recyclerView.canScrollVertically(directionDown) && dy > 0) {
-            onReachBottom()
+        if (canCall) {
+            val directionDown = 1;
+            if (!recyclerView.canScrollVertically(directionDown) && dy > 0) {
+                onReachBottom()
+            }
         }
     }
 }

@@ -1,15 +1,14 @@
 package com.example.pokedata.rest
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.pokedata.rest.pokedex.PokemonResource
 import kotlinx.coroutines.withTimeout
 
-class PokeApiRepository {
-    private val pokeApiService: PokeApiService = PokeApi.createApi()
+class PokeApiRepository(context: Context) {
 
-    val progressCount: LiveData<Int> get() = _progressCount
-    private val _progressCount: MutableLiveData<Int> = MutableLiveData()
+    private val pokeApiService: PokeApiService = PokeApi(context).createApi()
 
     suspend fun getPokemonLimit(): Int {
         try {
