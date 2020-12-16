@@ -5,9 +5,13 @@
     android:id="@+id/item_pokedex_pokemon"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginStart="4dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginEnd="4dp"
     app:cardBackgroundColor="#3ED58B"
-    app:strokeColor="@android:color/darker_gray"
-    app:strokeWidth="1dp">
+    app:cardCornerRadius="10dp"
+    app:cardElevation="2dp"
+    app:contentPadding="5dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout"
@@ -26,7 +30,7 @@
             android:textAlignment="textStart"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
             android:textColor="@color/design_default_color_on_primary"
-            android:textSize="18sp"
+            android:textSize="16sp"
             app:layout_constraintEnd_toStartOf="@+id/tvPokemonNumber"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -42,20 +46,23 @@
             android:textAlignment="textEnd"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
             android:textColor="@color/design_default_color_on_primary"
+            android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="#001" />
 
         <TextView
             android:id="@+id/tvPokemonType1"
-            android:layout_width="83dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:background="@color/pokemon_type_grass"
+            android:paddingStart="3dp"
+            android:paddingEnd="3dp"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
             android:textColor="@color/design_default_color_on_primary"
-            android:textSize="8sp"
+            android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="@+id/tvPokemonType2"
             app:layout_constraintStart_toStartOf="@+id/tvPokemonType2"
             app:layout_constraintTop_toBottomOf="@+id/tvPokemonType2"
@@ -63,14 +70,16 @@
 
         <TextView
             android:id="@+id/tvPokemonType2"
-            android:layout_width="83dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:background="@color/pokemon_type_poison"
+            android:paddingStart="3dp"
+            android:paddingEnd="3dp"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
             android:textColor="@color/design_default_color_on_primary"
-            android:textSize="8sp"
+            android:textSize="12sp"
             app:layout_constraintStart_toStartOf="@+id/tvPokemonName"
             app:layout_constraintTop_toBottomOf="@+id/tvPokemonName"
             tools:text="Poison" />
