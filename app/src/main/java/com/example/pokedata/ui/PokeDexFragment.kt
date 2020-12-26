@@ -5,13 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AbsListView
+import androidx.core.view.isGone
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pokedata.R
-import com.example.pokedata.rest.pokedex.PokemonResource
+import com.example.pokedata.models.PokemonBasic
 import com.example.pokedata.utils.EndlessRecyclerViewScroll
 import com.example.pokedata.vm.PokedexViewModel
 import kotlinx.android.synthetic.main.fragment_pokedex.*
@@ -20,7 +19,7 @@ import kotlinx.android.synthetic.main.fragment_pokedex.*
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
 class PokeDexFragment : Fragment() {
-    private val pokemon = arrayListOf<PokemonResource>()
+    private val pokemon = arrayListOf<PokemonBasic>()
     private val pokedexAdapter = PokedexAdapter(pokemon)
     private val viewModel: PokedexViewModel by activityViewModels()
 
@@ -66,6 +65,12 @@ class PokeDexFragment : Fragment() {
         })
         viewModel.canGoNextPage.observe(viewLifecycleOwner, {
             endlessScrollListener.canCall = it
+            pgPokedex.isGone = it
+        })
+        viewModel.endReached.observe(viewLifecycleOwner, {
+            val endReached = it;
+            endlessScrollListener.canCall = !endReached
+            pgPokedex.isGone = endReached
         })
     }
 }

@@ -34,7 +34,7 @@ class PokeApi(context: Context) {
                 .build()
 
         val pokeApi = Retrofit.Builder()
-                .baseUrl(PokeApiConfig.BASE_URL)
+                .baseUrl(PokeApiConfig.HOST + PokeApiConfig.BASE_URL)
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()

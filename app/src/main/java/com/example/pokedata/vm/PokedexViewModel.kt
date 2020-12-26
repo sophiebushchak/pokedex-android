@@ -5,41 +5,42 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.pokedata.models.PokemonBasic
 import com.example.pokedata.rest.PokeApiRepository
-import com.example.pokedata.rest.pokedex.PokemonResource
 import kotlinx.coroutines.launch
-import kotlin.properties.Delegates
 
 class PokedexViewModel(application: Application) : AndroidViewModel(application) {
-    var totalPokemonCount: Int? = null
+    private var totalPokemonInPokedex: Int = 0;
     var offset: Int = 0
     private val perPage: Int = 100
-    private val currentPokemonLoaded = mutableListOf<PokemonResource>()
+    private val currentPokemonLoaded = mutableListOf<PokemonBasic>()
 
     private val pokeApiRepository = PokeApiRepository(application.applicationContext)
 
-    private val _pokemonOnPage = MutableLiveData<MutableList<PokemonResource>>()
-    val pokemonOnPage: LiveData<MutableList<PokemonResource>> get() = _pokemonOnPage
+    private val _pokemonOnPage = MutableLiveData<MutableList<PokemonBasic>>()
+    val pokemonOnPage: LiveData<MutableList<PokemonBasic>> get() = _pokemonOnPage
 
     private val _canGoNextPage = MutableLiveData<Boolean>()
     val canGoNextPage: LiveData<Boolean> get() = _canGoNextPage
 
+    private val _endReached = MutableLiveData<Boolean>()
+    val endReached: LiveData<Boolean> get() = _endReached
+
     fun getPokedexNextPage() {
         viewModelScope.launch {
             try {
-                if (totalPokemonCount == null) {
-                    totalPokemonCount = pokeApiRepository.getPokemonLimit()
+                _canGoNextPage.value = false;
+                if (totalPokemonInPokedex == 0) {
+                    totalPokemonInPokedex = pokeApiRepository.getTotalPokemon()
                 }
-                var newOffset = offset + perPage
-                totalPokemonCount?.let {
-                    if (offset + perPage >= it) {
-                        newOffset = it
-                        _canGoNextPage.value = false;
-                    }
-                }
-                currentPokemonLoaded.addAll(pokeApiRepository.getPokemonPaginated(newOffset, offset))
-                offset += perPage;
+                currentPokemonLoaded.addAll(pokeApiRepository.getPokemonPaginated(offset, perPage))
+                val newOffset = offset + perPage
+                offset = newOffset
                 _pokemonOnPage.value = currentPokemonLoaded
+                _canGoNextPage.value = true
+                if (offset > totalPokemonInPokedex) {
+                    _endReached.value = true
+                }
             } catch (error: PokeApiRepository.PokeApiError) {
                 println(error)
             }

@@ -1,21 +1,16 @@
 package com.example.pokedata.rest
 
-import com.example.pokedata.rest.pokedex.PokedexResource
-import com.example.pokedata.rest.pokedex.PokemonEntryResource
-import com.example.pokedata.rest.pokedex.PokemonResource
-import com.example.pokedata.rest.pokedex.PokemonSpeciesResource
+import com.example.pokedata.models.PokemonBasic
+import com.example.pokedata.rest.response.PokedexCountResponse
+import com.example.pokedata.rest.response.PokedexResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface PokeApiService {
-    @GET("pokedex/national")
-    suspend fun getNationalPokedex(): PokedexResource
+    @GET("pokedex")
+    suspend fun getPokedexPaginated(@Query("offset") offset: Int, @Query("limit") limit: Int): PokedexResponse
 
-    @GET("pokemon/{id}")
-    suspend fun getPokemonById(@Path("id") id: Int): PokemonResource
-
-    @GET("pokemon-species/{name}")
-    suspend fun getPokemonSpeciesByName(@Path("name") name: String): PokemonSpeciesResource
-
+    @GET("pokedex/count")
+    suspend fun getPokedexTotalPokemon(): PokedexCountResponse
 }

@@ -1,22 +1,26 @@
 package com.example.pokedata.rest
 
 import android.content.Context
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.example.pokedata.rest.pokedex.PokemonResource
+import com.example.pokedata.models.PokemonBasic
 import kotlinx.coroutines.withTimeout
 
 class PokeApiRepository(context: Context) {
 
     private val pokeApiService: PokeApiService = PokeApi(context).createApi()
 
-    suspend fun getPokemonLimit(): Int {
+    suspend fun getPokemonPaginated(offset: Int, limit: Int): List<PokemonBasic> {
         try {
-            return withTimeout(5_000) {
-                pokeApiService.getNationalPokedex().pokemon_entries.size
+            val pokemon = mutableListOf<PokemonBasic>()
+            val response = withTimeout(5_000) {
+                pokeApiService.getPokedexPaginated(offset, limit)
             }
+            if (response.pokemon.isEmpty()) {
+                throw Error("Received empty results.")
+            }
+            pokemon.addAll(response.pokemon)
+            return pokemon
         } catch (error: Throwable) {
-            var message = "Something went wrong while counting Pokemon from the National Dex."
+            var message = "Something went wrong while retrieving Pokemon."
             error.message?.let {
                 message = it
             }
@@ -24,16 +28,14 @@ class PokeApiRepository(context: Context) {
         }
     }
 
-    suspend fun getPokemonPaginated(limit: Int, offset: Int): List<PokemonResource> {
+    suspend fun getTotalPokemon(): Int {
         try {
-            val pokemonRetrieved = mutableListOf<PokemonResource>()
-            for (i in offset+1..limit) {
-                val pokemon = withTimeout(5_000) { pokeApiService.getPokemonById(i) }
-                pokemonRetrieved.add(pokemon)
+            val response = withTimeout(5_000) {
+                pokeApiService.getPokedexTotalPokemon()
             }
-            return pokemonRetrieved
+            return response.count
         } catch (error: Throwable) {
-            var message = "Something went wrong while counting Pokemon from the National Dex."
+            var message = "Something went wrong while retrieving total Pokemon."
             error.message?.let {
                 message = it
             }
