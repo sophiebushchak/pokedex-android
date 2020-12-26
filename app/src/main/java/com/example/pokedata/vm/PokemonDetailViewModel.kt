@@ -1,4 +1,6 @@
 package com.example.pokedata.vm
 
-class PokemonDetailViewModel {
+import android.app.Application
+
+class PokemonDetailViewModel(application: Application) {
 }
