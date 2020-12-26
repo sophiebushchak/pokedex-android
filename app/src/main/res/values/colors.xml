@@ -31,5 +31,24 @@
     <color name="pokemon_type_steel">#AAAABA</color>
     <color name="pokemon_type_fairy">#F19AEC</color>
 
+    <!--Pokemon Type Backgrounds-->
+    <color name="pokemon_type_normal_background">#B7BCBD</color>
+    <color name="pokemon_type_fire_background">#C14E4E</color>
+    <color name="pokemon_type_water_background">#4E5AC1</color>
+    <color name="pokemon_type_electric_background">#E1BB4A</color>
+    <color name="pokemon_type_grass_background">#4EC152</color>
+    <color name="pokemon_type_ice_background">#4EC1C1</color>
+    <color name="pokemon_type_fighting_background">#9A4C3F</color>
+    <color name="pokemon_type_poison_background">#B04EC1</color>
+    <color name="pokemon_type_ground_background">#C1934E</color>
+    <color name="pokemon_type_flying_background">#4EC1BD</color>
+    <color name="pokemon_type_psychic_background">#D15A9B</color>
+    <color name="pokemon_type_bug_background">#9AA142</color>
+    <color name="pokemon_type_rock_background">#988637</color>
+    <color name="pokemon_type_ghost_background">#634EC1</color>
+    <color name="pokemon_type_dragon_background">#634EC1</color>
+    <color name="pokemon_type_dark_background">#936D59</color>
+    <color name="pokemon_type_steel_background">#5F7E93</color>
+    <color name="pokemon_type_fairy_background">#C14EAE</color>
 
 </resources>

@@ -19,24 +19,24 @@ open class PokemonBasic(
             val backShiny: String,
     )
 
-    enum class PokemonType(val typeColor: Int) {
-        normal(R.color.pokemon_type_normal),
-        fire(R.color.pokemon_type_fire),
-        fighting(R.color.pokemon_type_fighting),
-        water(R.color.pokemon_type_water),
-        flying(R.color.pokemon_type_flying),
-        grass(R.color.pokemon_type_grass),
-        poison(R.color.pokemon_type_poison),
-        electric(R.color.pokemon_type_electric),
-        ground(R.color.pokemon_type_ground),
-        psychic(R.color.pokemon_type_psychic),
-        rock(R.color.pokemon_type_rock),
-        ice(R.color.pokemon_type_ice),
-        bug(R.color.pokemon_type_bug),
-        dragon(R.color.pokemon_type_dragon),
-        ghost(R.color.pokemon_type_ghost),
-        dark(R.color.pokemon_type_dark),
-        steel(R.color.pokemon_type_steel),
-        fairy(R.color.pokemon_type_fairy)
+    enum class PokemonType(val typeColor: Int, val typeBackground: Int) {
+        normal(R.color.pokemon_type_normal, R.color.pokemon_type_normal_background),
+        fire(R.color.pokemon_type_fire, R.color.pokemon_type_fire_background),
+        fighting(R.color.pokemon_type_fighting, R.color.pokemon_type_fighting_background),
+        water(R.color.pokemon_type_water, R.color.pokemon_type_water_background),
+        flying(R.color.pokemon_type_flying, R.color.pokemon_type_flying_background),
+        grass(R.color.pokemon_type_grass, R.color.pokemon_type_grass_background),
+        poison(R.color.pokemon_type_poison, R.color.pokemon_type_poison_background),
+        electric(R.color.pokemon_type_electric, R.color.pokemon_type_electric_background),
+        ground(R.color.pokemon_type_ground, R.color.pokemon_type_ground_background),
+        psychic(R.color.pokemon_type_psychic, R.color.pokemon_type_psychic_background),
+        rock(R.color.pokemon_type_rock, R.color.pokemon_type_rock_background),
+        ice(R.color.pokemon_type_ice, R.color.pokemon_type_ice_background),
+        bug(R.color.pokemon_type_bug, R.color.pokemon_type_bug_background),
+        dragon(R.color.pokemon_type_dragon, R.color.pokemon_type_dragon_background),
+        ghost(R.color.pokemon_type_ghost, R.color.pokemon_type_ghost_background),
+        dark(R.color.pokemon_type_dark, R.color.pokemon_type_dark_background),
+        steel(R.color.pokemon_type_steel, R.color.pokemon_type_steel_background),
+        fairy(R.color.pokemon_type_fairy, R.color.pokemon_type_fairy_background)
     }
 }

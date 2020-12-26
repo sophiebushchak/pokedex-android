@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import androidx.cardview.widget.CardView
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
@@ -13,6 +14,7 @@ import com.bumptech.glide.Glide
 import com.example.pokedata.R
 import com.example.pokedata.models.PokemonBasic
 import com.example.pokedata.rest.PokeApiConfig
+import com.google.android.material.card.MaterialCardView
 import kotlinx.android.synthetic.main.item_pokedex_pokemon.view.*
 import java.util.*
 
@@ -27,7 +29,7 @@ class PokedexAdapter(private val pokemonResourceList: List<PokemonBasic>) : Recy
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         this.context = parent.context
         return ViewHolder(
-                LayoutInflater.from(parent.context).inflate(R.layout.item_pokedex_pokemon, parent, false)
+                LayoutInflater.from(parent.context).inflate(R.layout.item_pokedex_pokemon, parent, false) as MaterialCardView
         )
     }
 
@@ -60,7 +62,7 @@ class PokedexAdapter(private val pokemonResourceList: List<PokemonBasic>) : Recy
         setLoadInAnimation(holder.itemView, position)
     }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: CardView) : RecyclerView.ViewHolder(itemView) {
         fun databind(pokemon: PokemonBasic) {
             Glide.with(context).load(PokeApiConfig.HOST + pokemon.sprites.front).into(itemView.ivPokemonImage)
             itemView.tvPokemonName.text = pokemon.pokemonName
@@ -68,6 +70,8 @@ class PokedexAdapter(private val pokemonResourceList: List<PokemonBasic>) : Recy
             itemView.tvPokemonType1.text = pokemon.primaryType.capitalize(Locale.ENGLISH)
             val primaryType = PokemonBasic.PokemonType.valueOf(pokemon.primaryType)
             itemView.tvPokemonType1.setBackgroundColor(context.resources.getColor(primaryType.typeColor, context.theme))
+            val card = itemView as CardView
+            card.setCardBackgroundColor(context.resources.getColor(primaryType.typeBackground, context.theme))
             println(primaryType.typeColor)
             if (!pokemon.secondaryType.isNullOrBlank()) {
                 itemView.tvPokemonType2.isGone = false
