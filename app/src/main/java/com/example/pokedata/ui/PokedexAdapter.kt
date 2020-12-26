@@ -66,8 +66,13 @@ class PokedexAdapter(private val pokemonResourceList: List<PokemonBasic>) : Recy
             itemView.tvPokemonName.text = pokemon.pokemonName
             itemView.tvPokemonNumber.text = "#${pokemon.pokedexNumber.toString().padStart(3, '0')}"
             itemView.tvPokemonType1.text = pokemon.primaryType.capitalize(Locale.ENGLISH)
+            val primaryType = PokemonBasic.PokemonType.valueOf(pokemon.primaryType)
+            itemView.tvPokemonType1.setBackgroundColor(context.resources.getColor(primaryType.typeColor, context.theme))
+            println(primaryType.typeColor)
             if (!pokemon.secondaryType.isNullOrBlank()) {
                 itemView.tvPokemonType2.isGone = false
+                val secondaryType = PokemonBasic.PokemonType.valueOf(pokemon.secondaryType)
+                itemView.tvPokemonType2.setBackgroundColor(context.resources.getColor(secondaryType.typeColor, context.theme))
                 itemView.tvPokemonType2.text = pokemon.secondaryType.capitalize(Locale.ENGLISH)
             } else {
                 itemView.tvPokemonType2.isGone = true
