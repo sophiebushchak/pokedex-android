@@ -22,7 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.20" />
+            app:layout_constraintGuide_percent="0.15" />
 
         <TextView
             android:id="@+id/tvPokemonDetailName"
@@ -34,7 +34,7 @@
             android:shadowDx="1"
             android:shadowDy="3"
             android:shadowRadius="5"
-            android:text="Bulbasaur"
+            android:text="@string/tvUndefined"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline1"
             android:textColor="@color/design_default_color_on_primary"
             android:textSize="24sp"
@@ -44,11 +44,27 @@
             tools:text="Bulbasaur" />
 
         <TextView
+            android:id="@+id/tvPokemonDetailGenus"
+            android:layout_width="274dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:shadowColor="#888888"
+            android:shadowDx="1"
+            android:shadowDy="3"
+            android:shadowRadius="5"
+            android:text="@string/tvUndefined"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+            android:textColor="@color/design_default_color_on_primary"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@+id/tvPokemonDetailName"
+            app:layout_constraintTop_toBottomOf="@+id/tvPokemonDetailName"
+            tools:text="Grass Pokemon" />
+
+        <TextView
             android:id="@+id/tvPokemonDetailPrimaryType"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="24dp"
             android:background="@color/pokemon_type_grass"
             android:paddingStart="5dp"
             android:paddingEnd="5dp"
@@ -56,14 +72,35 @@
             android:shadowDx="1"
             android:shadowDy="3"
             android:shadowRadius="5"
-            android:text="Grass"
+            android:text="@string/tvUndefined"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
             android:textColor="@color/design_default_color_on_primary"
             android:textSize="14sp"
-            app:layout_constraintStart_toStartOf="@+id/guideline4"
-            app:layout_constraintTop_toBottomOf="@+id/tvPokemonDetailName"
-            tools:text="Psychic" />
+            app:layout_constraintStart_toStartOf="@+id/tvPokemonDetailGenus"
+            app:layout_constraintTop_toBottomOf="@+id/tvPokemonDetailGenus"
+            tools:text="Grass" />
+
+        <TextView
+            android:id="@+id/tvPokemonDetailSecondaryType"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@color/pokemon_type_grass"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:shadowColor="#888888"
+            android:shadowDx="1"
+            android:shadowDy="3"
+            android:shadowRadius="5"
+            android:text="@string/tvUndefined"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+            android:textColor="@color/design_default_color_on_primary"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@+id/tvPokemonDetailPrimaryType"
+            app:layout_constraintTop_toBottomOf="@+id/tvPokemonDetailPrimaryType"
+            tools:text="Grass" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline4"
@@ -90,7 +127,7 @@
             android:shadowDx="1"
             android:shadowDy="3"
             android:shadowRadius="5"
-            android:text="#001"
+            android:text="@string/tvUndefined"
             android:textColor="@color/design_default_color_on_primary"
             android:textSize="18sp"
             app:layout_constraintEnd_toStartOf="@+id/guideline5"
@@ -98,6 +135,26 @@
             tools:text="#001" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/pokemonDetailTabLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/layoutStart" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/pokemonDetailPager"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pokemonDetailTabLayout" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/topLayoutEnd"
@@ -111,14 +168,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.33" />
+        app:layout_constraintGuide_percent="0.30" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/imageBottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.47" />
+        app:layout_constraintGuide_percent="0.50" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/layoutStart"
@@ -138,13 +195,5 @@
         app:layout_constraintTop_toTopOf="@+id/imageTop"
         app:srcCompat="?android:attr/textSelectHandle"
         tools:src="@tools:sample/avatars" />
-
-    <TextView
-        android:id="@+id/textView8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        app:layout_constraintTop_toTopOf="@+id/layoutStart"
-        tools:layout_editor_absoluteX="119dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

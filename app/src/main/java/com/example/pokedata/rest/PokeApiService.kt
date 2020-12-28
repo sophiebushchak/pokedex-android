@@ -1,8 +1,8 @@
 package com.example.pokedata.rest
 
-import com.example.pokedata.models.PokemonBasic
 import com.example.pokedata.rest.response.PokedexCountResponse
 import com.example.pokedata.rest.response.PokedexResponse
+import com.example.pokedata.rest.response.PokemonResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -13,4 +13,7 @@ interface PokeApiService {
 
     @GET("pokedex/count")
     suspend fun getPokedexTotalPokemon(): PokedexCountResponse
+
+    @GET("pokemon/{pokedexNumber}")
+     suspend fun getPokemonByPokedexNumber(@Path("pokedexNumber") pokedexNumber: Int): PokemonResponse
 }

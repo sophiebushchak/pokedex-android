@@ -3,12 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/pokemonDetailFragment">
+    app:startDestination="@id/pokeDexFragment2">
     <fragment
         android:id="@+id/pokeDexFragment2"
         android:name="com.example.pokedata.ui.PokeDexFragment"
         android:label="fragment_pokedex"
-        tools:layout="@layout/fragment_pokedex" />
+        tools:layout="@layout/fragment_pokedex" >
+        <action
+            android:id="@+id/action_pokeDexFragment2_to_pokemonDetailFragment"
+            app:destination="@id/pokemonDetailFragment" />
+    </fragment>
     <fragment
         android:id="@+id/pokemonDetailFragment"
         android:name="com.example.pokedata.ui.PokemonDetailFragment"

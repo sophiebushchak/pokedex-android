@@ -6,9 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import androidx.cardview.widget.CardView
 import androidx.core.view.isGone
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.pokedata.R
@@ -18,7 +16,7 @@ import com.google.android.material.card.MaterialCardView
 import kotlinx.android.synthetic.main.item_pokedex_pokemon.view.*
 import java.util.*
 
-class PokedexAdapter(private val pokemonResourceList: List<PokemonBasic>) : RecyclerView.Adapter<PokedexAdapter.ViewHolder>(){
+class PokedexAdapter(private val pokemon: List<PokemonBasic>, private val onClickPokemon: (PokemonBasic) -> Unit) : RecyclerView.Adapter<PokedexAdapter.ViewHolder>(){
 
     private lateinit var context: Context
     private var lastPosition = -1
@@ -36,15 +34,12 @@ class PokedexAdapter(private val pokemonResourceList: List<PokemonBasic>) : Recy
     /**
      * Returns the size of the list
      */
-    override fun getItemCount(): Int {
-        return pokemonResourceList.size
-    }
+    override fun getItemCount(): Int = pokemon.size
 
     override fun onViewDetachedFromWindow(holder: ViewHolder) {
         holder.clearAnimation()
         super.onViewDetachedFromWindow(holder)
     }
-
 
     private fun setLoadInAnimation(view: View, position: Int) {
         if (position > lastPosition) {
@@ -58,26 +53,33 @@ class PokedexAdapter(private val pokemonResourceList: List<PokemonBasic>) : Recy
      * Called by RecyclerView to display the data at the specified position.
      */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.databind(pokemonResourceList[position])
+        holder.bind(pokemon[position])
         setLoadInAnimation(holder.itemView, position)
     }
 
-    inner class ViewHolder(itemView: CardView) : RecyclerView.ViewHolder(itemView) {
-        fun databind(pokemon: PokemonBasic) {
+    inner class ViewHolder(itemView: MaterialCardView) : RecyclerView.ViewHolder(itemView) {
+        init {
+            itemView.setOnClickListener {
+                onClickPokemon(pokemon[adapterPosition])
+            }
+            println(itemView.hasOnClickListeners())
+        }
+
+        fun bind(pokemon: PokemonBasic) {
             Glide.with(context).load(PokeApiConfig.HOST + pokemon.sprites.front).into(itemView.ivPokemonImage)
             itemView.tvPokemonName.text = pokemon.pokemonName
             itemView.tvPokemonNumber.text = "#${pokemon.pokedexNumber.toString().padStart(3, '0')}"
             itemView.tvPokemonType1.text = pokemon.primaryType.capitalize(Locale.ENGLISH)
             val primaryType = PokemonBasic.PokemonType.valueOf(pokemon.primaryType)
             itemView.tvPokemonType1.setBackgroundColor(context.resources.getColor(primaryType.typeColor, context.theme))
-            val card = itemView as CardView
+            val card = itemView as MaterialCardView
             card.setCardBackgroundColor(context.resources.getColor(primaryType.typeBackground, context.theme))
             println(primaryType.typeColor)
             if (!pokemon.secondaryType.isNullOrBlank()) {
                 itemView.tvPokemonType2.isGone = false
-                val secondaryType = PokemonBasic.PokemonType.valueOf(pokemon.secondaryType)
+                val secondaryType = PokemonBasic.PokemonType.valueOf(pokemon.secondaryType!!)
                 itemView.tvPokemonType2.setBackgroundColor(context.resources.getColor(secondaryType.typeColor, context.theme))
-                itemView.tvPokemonType2.text = pokemon.secondaryType.capitalize(Locale.ENGLISH)
+                itemView.tvPokemonType2.text = pokemon.secondaryType!!.capitalize(Locale.ENGLISH)
             } else {
                 itemView.tvPokemonType2.isGone = true
             }

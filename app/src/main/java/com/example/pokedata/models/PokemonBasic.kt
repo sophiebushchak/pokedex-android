@@ -3,15 +3,15 @@ package com.example.pokedata.models
 import android.graphics.Color
 import androidx.core.graphics.toColor
 import com.example.pokedata.R
+import kotlinx.android.parcel.RawValue
 
 open class PokemonBasic(
-        val pokedexNumber: Int,
-        val pokemonName: String,
-        val primaryType: String,
-        val secondaryType: String?,
-        val sprites: PokemonSprites
+    open val pokedexNumber: Int,
+    open val pokemonName: String,
+    open val primaryType: String,
+    open val secondaryType: String?,
+    open val sprites: PokemonSprites
 ) {
-
     data class PokemonSprites(
             val front: String,
             val back: String,

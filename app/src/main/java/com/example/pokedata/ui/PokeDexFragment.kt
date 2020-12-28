@@ -5,23 +5,29 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.core.view.isGone
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResult
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pokedata.R
 import com.example.pokedata.models.PokemonBasic
 import com.example.pokedata.utils.EndlessRecyclerViewScroll
 import com.example.pokedata.vm.PokedexViewModel
+import com.example.pokedata.vm.PokemonDetailViewModel
 import kotlinx.android.synthetic.main.fragment_pokedex.*
 
-/**
- * A simple [Fragment] subclass as the default destination in the navigation.
- */
+const val POKEMON_KEY = "pokemon_key"
+const val POKEMON_BUNDLE = "pokemon_bundle"
+
 class PokeDexFragment : Fragment() {
     private val pokemon = arrayListOf<PokemonBasic>()
-    private val pokedexAdapter = PokedexAdapter(pokemon)
-    private val viewModel: PokedexViewModel by activityViewModels()
+    private val pokedexAdapter = PokedexAdapter(pokemon, ::onClickPokemon)
+    private val pokedexViewModel: PokedexViewModel by activityViewModels()
+    private val pokemonDetailViewModel: PokemonDetailViewModel by activityViewModels()
 
     private lateinit var endlessScrollListener: EndlessRecyclerViewScroll
 
@@ -37,7 +43,8 @@ class PokeDexFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initViews()
         observePokedexPagination()
-        viewModel.getPokedexNextPage()
+        observeError()
+        pokedexViewModel.getPokedexNextPage()
     }
 
     private fun initViews() {
@@ -50,11 +57,16 @@ class PokeDexFragment : Fragment() {
 
     private fun getNextPage() {
         println("Loading next page!")
-        this.viewModel.getPokedexNextPage()
+        this.pokedexViewModel.getPokedexNextPage()
+    }
+
+    private fun onClickPokemon(pokemon: PokemonBasic) {
+        pokemonDetailViewModel.getPokemonDetailed(pokemon.pokedexNumber)
+        findNavController().navigate(R.id.action_pokeDexFragment2_to_pokemonDetailFragment)
     }
 
     private fun observePokedexPagination() {
-        viewModel.pokemonOnPage.observe(viewLifecycleOwner, { pokemon ->
+        pokedexViewModel.pokemonOnPage.observe(viewLifecycleOwner, { pokemon ->
             println("Received Pokemon LiveData")
             println(pokemon)
             if (pokemon != null) {
@@ -63,14 +75,23 @@ class PokeDexFragment : Fragment() {
                 pokedexAdapter.notifyDataSetChanged()
             }
         })
-        viewModel.canGoNextPage.observe(viewLifecycleOwner, {
+        pokedexViewModel.canGoNextPage.observe(viewLifecycleOwner, {
             endlessScrollListener.canCall = it
             pgPokedex.isGone = it
         })
-        viewModel.endReached.observe(viewLifecycleOwner, {
+        pokedexViewModel.endReached.observe(viewLifecycleOwner, {
             val endReached = it;
             endlessScrollListener.canCall = !endReached
             pgPokedex.isGone = endReached
         })
     }
+
+    private fun observeError() {
+        pokedexViewModel.error.observe(viewLifecycleOwner, {
+            if (!it.isNullOrBlank()) {
+                Toast.makeText(activity, it, Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
 }
