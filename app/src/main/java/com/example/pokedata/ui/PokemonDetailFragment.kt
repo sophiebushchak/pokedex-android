@@ -38,6 +38,7 @@ class PokemonDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observePokemon()
+        observeEvolutionChain()
         val viewPager: ViewPager2 = pokemonDetailPager
         viewPager.adapter = pokemonDetailAdapter
         val tabLayout: TabLayout = pokemonDetailTabLayout
@@ -76,6 +77,15 @@ class PokemonDetailFragment : Fragment() {
                 pokemonDetailAdapter.pokemon = it
                 updateViews(it)
                 pokemonDetailAdapter.notifyDataSetChanged()
+                viewModel.getPokemonEvolutionChain(it.pokedexNumber)
+            }
+        })
+    }
+
+    private fun observeEvolutionChain() {
+        viewModel.currentEvolutionChain.observe(viewLifecycleOwner, {
+            if (it != null) {
+                println(it)
             }
         })
     }

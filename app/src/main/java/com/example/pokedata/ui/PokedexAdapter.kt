@@ -62,7 +62,6 @@ class PokedexAdapter(private val pokemon: List<PokemonBasic>, private val onClic
             itemView.setOnClickListener {
                 onClickPokemon(pokemon[adapterPosition])
             }
-            println(itemView.hasOnClickListeners())
         }
 
         fun bind(pokemon: PokemonBasic) {
@@ -74,7 +73,6 @@ class PokedexAdapter(private val pokemon: List<PokemonBasic>, private val onClic
             itemView.tvPokemonType1.setBackgroundColor(context.resources.getColor(primaryType.typeColor, context.theme))
             val card = itemView as MaterialCardView
             card.setCardBackgroundColor(context.resources.getColor(primaryType.typeBackground, context.theme))
-            println(primaryType.typeColor)
             if (!pokemon.secondaryType.isNullOrBlank()) {
                 itemView.tvPokemonType2.isGone = false
                 val secondaryType = PokemonBasic.PokemonType.valueOf(pokemon.secondaryType!!)

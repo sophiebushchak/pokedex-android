@@ -7,9 +7,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.pokedata.models.PokemonDetailed
 import com.example.pokedata.rest.PokeApiRepository
+import com.example.pokedata.rest.response.PokemonEvolutionChain
+import com.example.pokedata.ui.PokemonDetailAdapter
 import kotlinx.coroutines.launch
 
-class PokemonDetailViewModel(application: Application): AndroidViewModel(application) {
+class PokemonDetailViewModel(application: Application) : AndroidViewModel(application) {
     private val pokeApiRepository = PokeApiRepository(application.applicationContext)
 
     private val _error = MutableLiveData<String>()
@@ -17,6 +19,9 @@ class PokemonDetailViewModel(application: Application): AndroidViewModel(applica
 
     private val _currentPokemon = MutableLiveData<PokemonDetailed>()
     val currentPokemon: LiveData<PokemonDetailed> get() = _currentPokemon
+
+    private val _currentEvolutionChain = MutableLiveData<PokemonEvolutionChain>()
+    val currentEvolutionChain: LiveData<PokemonEvolutionChain> get() = _currentEvolutionChain
 
     fun getPokemonDetailed(pokedexNumber: Int) {
         viewModelScope.launch {
@@ -26,6 +31,19 @@ class PokemonDetailViewModel(application: Application): AndroidViewModel(applica
                 _currentPokemon.value = pokemon
             } catch (error: PokeApiRepository.PokeApiError) {
                 println(error)
+                error.message?.let { notifyError(it) }
+            }
+        }
+    }
+
+    fun getPokemonEvolutionChain(pokedexNumber: Int) {
+        viewModelScope.launch {
+            try {
+                val chain = pokeApiRepository.getPokemonEvolutionChain(pokedexNumber)
+                println(chain)
+
+            } catch (error: PokeApiRepository.PokeApiError) {
+                println(error.stackTrace)
                 error.message?.let { notifyError(it) }
             }
         }

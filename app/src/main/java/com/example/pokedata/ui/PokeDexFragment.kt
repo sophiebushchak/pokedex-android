@@ -6,8 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
+import androidx.core.view.get
 import androidx.core.view.isGone
+import androidx.core.view.size
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
@@ -64,6 +67,7 @@ class PokeDexFragment : Fragment() {
         pokemonDetailViewModel.getPokemonDetailed(pokemon.pokedexNumber)
         findNavController().navigate(R.id.action_pokeDexFragment2_to_pokemonDetailFragment)
     }
+
 
     private fun observePokedexPagination() {
         pokedexViewModel.pokemonOnPage.observe(viewLifecycleOwner, { pokemon ->
