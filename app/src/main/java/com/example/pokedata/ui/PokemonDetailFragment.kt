@@ -13,6 +13,7 @@ import com.example.pokedata.R
 import com.example.pokedata.models.PokemonBasic
 import com.example.pokedata.models.PokemonDetailed
 import com.example.pokedata.rest.PokeApiConfig
+import com.example.pokedata.rest.response.PokemonEvolutionChain
 import com.example.pokedata.vm.PokemonDetailViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -23,9 +24,9 @@ import java.util.*
  * A simple [Fragment] subclass as the second destination in the navigation.
  */
 class PokemonDetailFragment : Fragment() {
-    private val pokemon: PokemonDetailed? = null
-    private val pokemonDetailAdapter = PokemonDetailAdapter(pokemon)
+    private val pokemonDetailAdapter = PokemonDetailAdapter(null, null)
     private val viewModel: PokemonDetailViewModel by activityViewModels()
+    private lateinit var tabLayout: TabLayout
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,7 +42,7 @@ class PokemonDetailFragment : Fragment() {
         observeEvolutionChain()
         val viewPager: ViewPager2 = pokemonDetailPager
         viewPager.adapter = pokemonDetailAdapter
-        val tabLayout: TabLayout = pokemonDetailTabLayout
+        tabLayout = pokemonDetailTabLayout
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             if (position == 0) {
                 tab.text = "Info"
@@ -86,6 +87,14 @@ class PokemonDetailFragment : Fragment() {
         viewModel.currentEvolutionChain.observe(viewLifecycleOwner, {
             if (it != null) {
                 println(it)
+                pokemonDetailAdapter.evolutionChain = it
+                pokemonDetailAdapter.notifyDataSetChanged()
+            }
+        })
+        pokemonDetailAdapter.pokemonEvolutionSelected.observe(viewLifecycleOwner, {
+            if (it != null) {
+                viewModel.getPokemonDetailed(it)
+                tabLayout.selectTab(tabLayout.getTabAt(0))
             }
         })
     }

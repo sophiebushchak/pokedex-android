@@ -40,8 +40,7 @@ class PokemonDetailViewModel(application: Application) : AndroidViewModel(applic
         viewModelScope.launch {
             try {
                 val chain = pokeApiRepository.getPokemonEvolutionChain(pokedexNumber)
-                println(chain)
-
+                _currentEvolutionChain.value = chain
             } catch (error: PokeApiRepository.PokeApiError) {
                 println(error.stackTrace)
                 error.message?.let { notifyError(it) }

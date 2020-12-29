@@ -1,14 +1,27 @@
 package com.example.pokedata.ui
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isGone
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.pokedata.R
+import com.example.pokedata.models.PokemonBasic
 import com.example.pokedata.models.PokemonDetailed
+import com.example.pokedata.rest.PokeApiConfig
+import com.example.pokedata.rest.response.PokemonEvolutionChain
+import kotlinx.android.synthetic.main.item_pokemon_detail_evolutions.view.*
 import kotlinx.android.synthetic.main.item_pokemon_detail_information.view.*
 
-class PokemonDetailAdapter(var pokemon: PokemonDetailed?) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class PokemonDetailAdapter(var pokemon: PokemonDetailed?, var evolutionChain: PokemonEvolutionChain?) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    private val _pokemonEvolutionSelected = MutableLiveData<Int>()
+    val pokemonEvolutionSelected: LiveData<Int> get() = _pokemonEvolutionSelected
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             0 -> PokemonInfoViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_pokemon_detail_information, parent, false))
@@ -25,7 +38,7 @@ class PokemonDetailAdapter(var pokemon: PokemonDetailed?) : RecyclerView.Adapter
             }
             1 -> {
                 val viewHolder = holder as PokemonEvolutionsViewHolder
-                this.pokemon?.let { viewHolder.databind(it) }
+                this.evolutionChain?.let { viewHolder.databind(it) }
             }
         }
     }
@@ -42,13 +55,50 @@ class PokemonDetailAdapter(var pokemon: PokemonDetailed?) : RecyclerView.Adapter
         fun databind(pokemon: PokemonDetailed) {
             itemView.tvHeightValue.text = "${(pokemon.height.toDouble() / 10)} m"
             itemView.tvWeightValue.text = "${pokemon.weight.toDouble() / 10} kg"
-            itemView.tvPokedexEntry.text = pokemon.pokedexEntryDescription.replace("\n","")
+            itemView.tvPokedexEntry.text = pokemon.pokedexEntryDescription.replace("\n"," ")
         }
     }
 
     inner class PokemonEvolutionsViewHolder(view: View): RecyclerView.ViewHolder(view) {
-        fun databind(chain: PokemonDetailed) {
-
+        fun databind(chain: PokemonEvolutionChain) {
+            chain.first?.let{
+                val pokemon = it
+                itemView.tvEvolution1.text = pokemon.pokemonName
+                Glide.with(itemView.context).load(PokeApiConfig.HOST + pokemon.sprites.front).into(itemView.ivEvolution1)
+                itemView.ivEvolution1.setOnClickListener {
+                    _pokemonEvolutionSelected.value = pokemon.pokedexNumber
+                }
+            }
+            chain.second?.let {
+                val pokemon = it
+                itemView.tvEvolution2.isGone = false;
+                itemView.tvEvolution2.text = it.pokemonName
+                itemView.ivArrowFirstEvolution.isGone = false;
+                itemView.ivEvolution2.isGone = false;
+                Glide.with(itemView.context).load(PokeApiConfig.HOST + it.sprites.front).into(itemView.ivEvolution2)
+                itemView.ivEvolution2.setOnClickListener {
+                    _pokemonEvolutionSelected.value = pokemon.pokedexNumber
+                }
+            } ?: run {
+                itemView.tvEvolution2.isGone = true;
+                itemView.ivArrowFirstEvolution.isGone = true
+                itemView.ivEvolution2.isGone = true
+            }
+            chain.third?.let {
+                val pokemon = it
+                itemView.tvEvolution3.isGone = false;
+                itemView.tvEvolution3.text = it.pokemonName
+                itemView.ivArrowSecondEvolution.isGone = false;
+                itemView.ivEvolution3.isGone = false;
+                Glide.with(itemView.context).load(PokeApiConfig.HOST + it.sprites.front).into(itemView.ivEvolution3)
+                itemView.ivEvolution3.setOnClickListener {
+                    _pokemonEvolutionSelected.value = pokemon.pokedexNumber
+                }
+            } ?: run {
+                itemView.tvEvolution3.isGone = true;
+                itemView.ivArrowSecondEvolution.isGone = true
+                itemView.ivEvolution3.isGone = true
+            }
         }
     }
 
