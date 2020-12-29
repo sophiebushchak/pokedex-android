@@ -3,12 +3,9 @@ package com.example.pokedata.ui
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pokedata.R
 import com.example.pokedata.models.PokemonDetailed
-import com.example.pokedata.models.PokemonEvolutionChain
-import com.google.android.material.textview.MaterialTextView
 import kotlinx.android.synthetic.main.item_pokemon_detail_information.view.*
 
 class PokemonDetailAdapter(var pokemon: PokemonDetailed?) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {

@@ -3,6 +3,7 @@ package com.example.pokedata.rest
 import android.content.Context
 import com.example.pokedata.models.PokemonBasic
 import com.example.pokedata.models.PokemonDetailed
+import com.example.pokedata.rest.response.PokemonEvolutionChain
 import kotlinx.coroutines.withTimeout
 
 class PokeApiRepository(context: Context) {
@@ -55,6 +56,20 @@ class PokeApiRepository(context: Context) {
             return response.count
         } catch (error: Throwable) {
             var message = "Something went wrong while retrieving total Pokemon."
+            error.message?.let {
+                message = it
+            }
+            throw PokeApiError(message, error)
+        }
+    }
+
+    suspend fun getPokemonEvolutionChain(pokedexNumber: Int): PokemonEvolutionChain {
+        try {
+            return withTimeout(5_000) {
+                pokeApiService.getPokemonEvolutionChain(pokedexNumber)
+            };
+        } catch (error: Throwable) {
+            var message = "Could not retrieve evolution chain."
             error.message?.let {
                 message = it
             }

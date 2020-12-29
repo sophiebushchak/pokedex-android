@@ -7,21 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isGone
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.setFragmentResult
-import androidx.fragment.app.setFragmentResultListener
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.example.pokedata.R
 import com.example.pokedata.models.PokemonBasic
 import com.example.pokedata.models.PokemonDetailed
-import com.example.pokedata.models.PokemonEvolutionChain
 import com.example.pokedata.rest.PokeApiConfig
 import com.example.pokedata.vm.PokemonDetailViewModel
-import com.google.android.material.card.MaterialCardView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.fragment_pokemon_detail.*
-import kotlinx.android.synthetic.main.item_pokedex_pokemon.view.*
 import java.util.*
 
 /**

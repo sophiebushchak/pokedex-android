@@ -1,4 +1,6 @@
-package com.example.pokedata.models
+package com.example.pokedata.rest.response
+
+import com.example.pokedata.models.PokemonBasic
 
 data class PokemonEvolutionChain(
     val first: PokemonBasic?,
