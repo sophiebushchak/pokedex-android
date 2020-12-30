@@ -8,5 +8,6 @@
     <!--Pokemon Detail Information-->
     <string name="tvHeightLabel">Height</string>
     <string name="tvWeightLabel">Weight</string>
+    <string name="action_search">Search</string>
 
 </resources>

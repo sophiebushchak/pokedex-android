@@ -13,10 +13,10 @@
 
     <!--Pokemon Types-->
     <color name="pokemon_type_normal">#aaaa9a</color>
-    <color name="pokemon_type_fire">#ff5131</color>
+    <color name="pokemon_type_fire">#ED7862</color>
     <color name="pokemon_type_water">#3c95fb</color>
     <color name="pokemon_type_electric">#fecf48</color>
-    <color name="pokemon_type_grass">#8becba</color>
+    <color name="pokemon_type_grass">#62EDA5</color>
     <color name="pokemon_type_ice">#67C9FC</color>
     <color name="pokemon_type_fighting">#BC5B49</color>
     <color name="pokemon_type_poison">#AC5798</color>
@@ -32,11 +32,11 @@
     <color name="pokemon_type_fairy">#F19AEC</color>
 
     <!--Pokemon Type Backgrounds-->
-    <color name="pokemon_type_normal_background">#B7BCBD</color>
-    <color name="pokemon_type_fire_background">#C14E4E</color>
-    <color name="pokemon_type_water_background">#4E5AC1</color>
-    <color name="pokemon_type_electric_background">#E1BB4A</color>
-    <color name="pokemon_type_grass_background">#3ed58b</color>
+    <color name="pokemon_type_normal_background">#C4C9CA</color>
+    <color name="pokemon_type_fire_background">#D54B3E</color>
+    <color name="pokemon_type_water_background">#4C6AD8</color>
+    <color name="pokemon_type_electric_background">#D5AA3E</color>
+    <color name="pokemon_type_grass_background">#3ED58B</color>
     <color name="pokemon_type_ice_background">#4EC1C1</color>
     <color name="pokemon_type_fighting_background">#9A4C3F</color>
     <color name="pokemon_type_poison_background">#B04EC1</color>
