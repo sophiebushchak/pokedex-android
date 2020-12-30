@@ -30,6 +30,26 @@ class PokeApiRepository(context: Context) {
         }
     }
 
+    suspend fun getPokemonWithSearch(searchValue: String): List<PokemonBasic> {
+        try {
+            val pokemon = mutableListOf<PokemonBasic>()
+            val response = withTimeout(5_000) {
+                pokeApiService.getPokedexWithSearch(searchValue)
+            }
+            if (response.pokemon.isEmpty()) {
+                throw Error("Could not find any Pokemon with $searchValue in name.")
+            }
+            pokemon.addAll(response.pokemon)
+            return pokemon
+        } catch (error: Throwable) {
+            var message = "Something went wrong during search."
+            error.message?.let {
+                message = it
+            }
+            throw PokeApiError(message, error)
+        }
+    }
+
     suspend fun getPokemonByPokedexNumber(pokedexNumber: Int): PokemonDetailed {
         try {
             val response = withTimeout(5_000) {

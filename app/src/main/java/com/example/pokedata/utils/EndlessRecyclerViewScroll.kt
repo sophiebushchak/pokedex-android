@@ -14,6 +14,7 @@ class EndlessRecyclerViewScroll(private val onReachBottom: () -> Unit, var canCa
         if (canCall) {
             val directionDown = 1;
             if (!recyclerView.canScrollVertically(directionDown) && dy > 0) {
+                println("Calling onReachBottom!")
                 onReachBottom()
             }
         }

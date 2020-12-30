@@ -21,6 +21,8 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/content_main" />
+    <include
+        layout="@layout/content_main"
+        android:background="#FF3E4043" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -15,6 +15,11 @@ interface PokeApiService {
         @Query("limit") limit: Int
     ): PokedexResponse
 
+    @GET("pokedex")
+    suspend fun getPokedexWithSearch(
+        @Query("name") name: String,
+    ): PokedexResponse
+
     @GET("pokedex/count")
     suspend fun getPokedexTotalPokemon(): PokedexCountResponse
 

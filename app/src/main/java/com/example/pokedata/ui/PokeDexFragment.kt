@@ -1,18 +1,15 @@
 package com.example.pokedata.ui
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.activity.addCallback
 import androidx.core.os.bundleOf
-import androidx.core.view.get
 import androidx.core.view.isGone
-import androidx.core.view.size
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,9 +20,6 @@ import com.example.pokedata.vm.PokedexViewModel
 import com.example.pokedata.vm.PokemonDetailViewModel
 import kotlinx.android.synthetic.main.fragment_pokedex.*
 
-const val POKEMON_KEY = "pokemon_key"
-const val POKEMON_BUNDLE = "pokemon_bundle"
-
 class PokeDexFragment : Fragment() {
     private val pokemon = arrayListOf<PokemonBasic>()
     private val pokedexAdapter = PokedexAdapter(pokemon, ::onClickPokemon)
@@ -35,27 +29,71 @@ class PokeDexFragment : Fragment() {
     private lateinit var endlessScrollListener: EndlessRecyclerViewScroll
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
+        val backButtonCallBack = requireActivity().onBackPressedDispatcher.addCallback(this) {
+            if (pokedexViewModel.isOnMainPokedex()) {
+                requireActivity().finishAndRemoveTask()
+            } else {
+                println("Popping out of search.")
+                pokedexViewModel.popPokemonStack()
+                findNavController().popBackStack()
+            }
+        }
+        backButtonCallBack.isEnabled = true
+        setHasOptionsMenu(true)
         return inflater.inflate(R.layout.fragment_pokedex, container, false)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_main, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.action_search -> {
+            this.openSearchMenu()
+            true
+        }
+        else -> {
+            false
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initViews()
         observePokedexPagination()
         observeError()
-        pokedexViewModel.getPokedexNextPage()
+        initViews()
     }
 
     private fun initViews() {
+        searchModal.isGone = true;
         val gridlLayoutManager = GridLayoutManager(context, 2, RecyclerView.VERTICAL, false)
         rvPokedex.layoutManager = gridlLayoutManager
         rvPokedex.adapter = pokedexAdapter
         endlessScrollListener = EndlessRecyclerViewScroll({ getNextPage() }, true)
         rvPokedex.addOnScrollListener(endlessScrollListener)
+    }
+
+    private fun openSearchMenu() {
+        searchModal.isClickable = true
+        searchModal.isGone = false
+        ivCloseSearch.setOnClickListener {
+            this.closeSearchMenu()
+        }
+        btnSearch.setOnClickListener {
+            this.searchPokemon()
+        }
+    }
+
+    private fun searchPokemon() {
+        pokedexViewModel.searchPokemon(etSearchField.text.toString())
+    }
+
+    private fun closeSearchMenu() {
+        etSearchField.text?.clear()
+        searchModal.isGone = true
     }
 
     private fun getNextPage() {
@@ -79,14 +117,21 @@ class PokeDexFragment : Fragment() {
                 pokedexAdapter.notifyDataSetChanged()
             }
         })
+        pokedexViewModel.isSearching.observe(viewLifecycleOwner, {
+            pgPokedex.isGone = !it
+        })
         pokedexViewModel.canGoNextPage.observe(viewLifecycleOwner, {
             endlessScrollListener.canCall = it
-            pgPokedex.isGone = it
         })
-        pokedexViewModel.endReached.observe(viewLifecycleOwner, {
+        pokedexViewModel.currentEndReached.observe(viewLifecycleOwner, {
             val endReached = it;
             endlessScrollListener.canCall = !endReached
-            pgPokedex.isGone = endReached
+        })
+        pokedexViewModel.searchComplete.observe(viewLifecycleOwner, {
+            if (it) {
+                closeSearchMenu()
+                findNavController().navigate(R.id.action_pokeDexFragment2_self)
+            }
         })
     }
 

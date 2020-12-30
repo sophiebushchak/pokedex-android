@@ -39,4 +39,8 @@ open class PokemonBasic(
         steel(R.color.pokemon_type_steel, R.color.pokemon_type_steel_background),
         fairy(R.color.pokemon_type_fairy, R.color.pokemon_type_fairy_background)
     }
+
+    override fun toString(): String {
+        return pokemonName
+    }
 }
