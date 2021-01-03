@@ -1,15 +1,12 @@
-package com.example.pokedata.ui
+package com.example.pokedata.ui.pokedex
 
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
 import androidx.activity.addCallback
-import androidx.core.os.bundleOf
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.setFragmentResult
-import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView

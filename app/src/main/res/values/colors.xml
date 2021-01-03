@@ -9,7 +9,8 @@
     <color name="white">#FFFFFFFF</color>
 
     <!--PokeData Light Theme Colors-->
-    <color name="pokered">#de4d49</color>
+    <color name="pokered">#e64340</color>
+    <color name="pokegray">#3E4043</color>
 
     <!--Pokemon Types-->
     <color name="pokemon_type_normal">#aaaa9a</color>

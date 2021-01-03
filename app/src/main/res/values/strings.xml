@@ -9,5 +9,7 @@
     <string name="tvHeightLabel">Height</string>
     <string name="tvWeightLabel">Weight</string>
     <string name="action_search">Search</string>
+    <string name="tvSplashTitle">PokéData</string>
+    <string name="tvSplashSubtitle">A Pokédex for Pokémon</string>
 
 </resources>

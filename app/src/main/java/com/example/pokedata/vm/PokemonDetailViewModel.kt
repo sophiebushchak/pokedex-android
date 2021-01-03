@@ -8,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.pokedata.models.PokemonDetailed
 import com.example.pokedata.rest.PokeApiRepository
 import com.example.pokedata.rest.response.PokemonEvolutionChain
-import com.example.pokedata.ui.PokemonDetailAdapter
 import kotlinx.coroutines.launch
 
 class PokemonDetailViewModel(application: Application) : AndroidViewModel(application) {

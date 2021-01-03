@@ -1,4 +1,4 @@
-package com.example.pokedata.ui
+package com.example.pokedata.ui.pokedex
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -22,7 +22,7 @@ class PokedexAdapter(private val pokemon: List<PokemonBasic>, private val onClic
     private var lastPosition = -1
 
     /**
-     * Creates and returns a ViewHolder object, inflating a standard layout called simple_list_item_1.
+     * Creates and returns a ViewHolder object
      */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         this.context = parent.context

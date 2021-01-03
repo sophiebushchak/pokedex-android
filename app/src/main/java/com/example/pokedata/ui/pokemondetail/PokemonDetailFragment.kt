@@ -1,4 +1,4 @@
-package com.example.pokedata.ui
+package com.example.pokedata.ui.pokemondetail
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -13,7 +13,6 @@ import com.example.pokedata.R
 import com.example.pokedata.models.PokemonBasic
 import com.example.pokedata.models.PokemonDetailed
 import com.example.pokedata.rest.PokeApiConfig
-import com.example.pokedata.rest.response.PokemonEvolutionChain
 import com.example.pokedata.vm.PokemonDetailViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -43,6 +42,7 @@ class PokemonDetailFragment : Fragment() {
         val viewPager: ViewPager2 = pokemonDetailPager
         viewPager.adapter = pokemonDetailAdapter
         tabLayout = pokemonDetailTabLayout
+        //Always 2 same tabs
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             if (position == 0) {
                 tab.text = "Info"

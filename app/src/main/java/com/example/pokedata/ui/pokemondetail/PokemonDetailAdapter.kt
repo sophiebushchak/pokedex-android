@@ -1,6 +1,5 @@
-package com.example.pokedata.ui
+package com.example.pokedata.ui.pokemondetail
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +9,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.pokedata.R
-import com.example.pokedata.models.PokemonBasic
 import com.example.pokedata.models.PokemonDetailed
 import com.example.pokedata.rest.PokeApiConfig
 import com.example.pokedata.rest.response.PokemonEvolutionChain

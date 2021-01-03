@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#3E4043"
-    tools:context=".ui.PokeDexFragment">
+    tools:context=".ui.pokedex.PokeDexFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvPokedex"
@@ -40,7 +40,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#BF494040"
-        android:elevation="24dp">
+        android:elevation="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/ivCloseSearch"
