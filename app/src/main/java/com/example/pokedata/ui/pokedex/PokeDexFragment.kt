@@ -30,7 +30,9 @@ class PokeDexFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val backButtonCallBack = requireActivity().onBackPressedDispatcher.addCallback(this) {
-            if (pokedexViewModel.isOnMainPokedex()) {
+            if (!searchModal.isGone) {
+                closeSearchMenu()
+            } else if (pokedexViewModel.isOnMainPokedex()) {
                 requireActivity().finishAndRemoveTask()
             } else {
                 println("Popping out of search.")
