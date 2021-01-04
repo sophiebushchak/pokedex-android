@@ -9,7 +9,20 @@
     <string name="tvHeightLabel">Height</string>
     <string name="tvWeightLabel">Weight</string>
     <string name="action_search">Search</string>
+
+    <!--Splash Screen-->
     <string name="tvSplashTitle">PokéData</string>
     <string name="tvSplashSubtitle">A Pokédex for Pokémon</string>
+
+    <!--Sign up/Log In-->
+    <string name="tvLoginHelp">Please enter an email and password to log in.</string>
+    <string name="tvSignUpHelp">Please enter an email and password to create an account.</string>
+    <string name="tfSignupEmail">Email</string>
+    <string name="tfSignupPassword">Password</string>
+    <string name="tfSignupPasswordConfirm">Confirm Password</string>
+    <string name="btnSignup">Sign Up</string>
+    <string name="btnLogin">Log In</string>
+    <string name="tvHaveAccount">Already have an account?</string>
+    <string name="tvDontHaveAccount">Don\'t have an account?</string>
 
 </resources>

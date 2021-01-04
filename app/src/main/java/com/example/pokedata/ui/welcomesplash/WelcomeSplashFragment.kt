@@ -60,7 +60,7 @@ class WelcomeSplashFragment : Fragment() {
                 )
             }
         })
-        viewModel.error.observe(viewLifecycleOwner, {
+        viewModel.authenticationError.observe(viewLifecycleOwner, {
             if (!it.isNullOrBlank()) {
                 Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
             }

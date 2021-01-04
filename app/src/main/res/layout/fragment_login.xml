@@ -1,32 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/pokered"
     tools:context=".ui.login.LoginFragment">
 
 
     <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
+        android:id="@+id/tvLoginHelp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="TextView"
-        tools:layout_editor_absoluteX="178dp"
-        tools:layout_editor_absoluteY="276dp" />
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="32dp"
+        android:text="@string/tvSignUpHelp"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/tfSignUpEmail"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tfSignUpEmail"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="TextView"
-        tools:layout_editor_absoluteX="175dp"
-        tools:layout_editor_absoluteY="194dp" />
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        android:hint="@string/tfSignupEmail"
+        android:textColorHint="@color/pokegray"
+        app:boxBackgroundColor="#C9C17878"
+        app:boxBackgroundMode="filled"
+        app:boxStrokeColor="@color/pokegray"
+        app:helperTextEnabled="false"
+        app:hintTextColor="#572F2F"
+        app:layout_constraintBottom_toTopOf="@+id/tfSignUpPassword"
+        app:layout_constraintEnd_toEndOf="@+id/tvLoginHelp"
+        app:layout_constraintStart_toStartOf="@+id/tvLoginHelp"
+        app:layout_constraintTop_toBottomOf="@+id/tvLoginHelp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etSignUpEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tfSignUpPassword"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:hint="@string/tfSignupPassword"
+        android:textColorHint="@color/pokegray"
+        app:boxBackgroundColor="#C9C17878"
+        app:boxBackgroundMode="filled"
+        app:boxStrokeColor="@color/pokegray"
+        app:hintTextColor="#572F2F"
+        app:layout_constraintBottom_toTopOf="@+id/tfSignUpPasswordConfirm"
+        app:layout_constraintEnd_toEndOf="@+id/tfSignUpEmail"
+        app:layout_constraintStart_toStartOf="@+id/tfSignUpEmail"
+        app:layout_constraintTop_toBottomOf="@+id/tfSignUpEmail"
+        app:passwordToggleEnabled="true"
+        app:passwordToggleTint="#572F2F">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etSignUpPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tfSignUpPasswordConfirm"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/tfSignupPasswordConfirm"
+        android:textColorHint="@color/pokegray"
+        app:boxBackgroundColor="#C9C17878"
+        app:boxBackgroundMode="filled"
+        app:boxStrokeColor="@color/pokegray"
+        app:hintTextColor="#572F2F"
+        app:layout_constraintBottom_toTopOf="@+id/btnSignup"
+        app:layout_constraintEnd_toEndOf="@+id/tfSignUpPassword"
+        app:layout_constraintStart_toStartOf="@+id/tfSignUpPassword"
+        app:layout_constraintTop_toBottomOf="@+id/tfSignUpPassword"
+        app:passwordToggleEnabled="true"
+        app:passwordToggleTint="#572F2F">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etSignUpPasswordConfirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btnSignup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button"
-        tools:layout_editor_absoluteX="181dp"
-        tools:layout_editor_absoluteY="528dp" />
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/pokegray"
+        android:text="@string/btnSignup"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/tfSignUpPasswordConfirm"
+        app:layout_constraintStart_toStartOf="@+id/tfSignUpPasswordConfirm"
+        app:layout_constraintTop_toBottomOf="@+id/tfSignUpPasswordConfirm" />
+
+    <TextView
+        android:id="@+id/tvHaveAccount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:clickable="true"
+        android:text="@string/tvHaveAccount"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="@color/pokegray"
+        app:layout_constraintEnd_toEndOf="@+id/btnSignup"
+        app:layout_constraintHorizontal_bias="0.485"
+        app:layout_constraintStart_toStartOf="@+id/btnSignup"
+        app:layout_constraintTop_toBottomOf="@+id/btnSignup" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
