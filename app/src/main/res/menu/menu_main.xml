@@ -4,9 +4,17 @@
     tools:context="com.example.pokedata.ui.MainActivity">
 
     <item
+        android:id="@+id/action_view_favourites"
+        android:icon="@drawable/ic_favourite"
+        android:title="Favourites"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/action_search"
         android:icon="@drawable/ic_search_black_24dp"
         android:title="@string/action_search"
         app:showAsAction="ifRoom" />
+
+
 
 </menu>

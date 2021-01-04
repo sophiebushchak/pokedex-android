@@ -5,6 +5,8 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.pokedata.R
+import com.example.pokedata.firebase.FavouritesRepository
 import com.example.pokedata.models.PokemonBasic
 import com.example.pokedata.models.PokemonDetailed
 import com.example.pokedata.rest.PokeApiRepository
@@ -14,7 +16,9 @@ import kotlin.collections.ArrayList
 
 class PokedexViewModel(application: Application) : AndroidViewModel(application) {
     private val pokeApiRepository = PokeApiRepository(application.applicationContext)
-    private val pokemonLoaded: Stack<ArrayList<PokemonBasic>> = Stack()
+    private val favouritesRepository: FavouritesRepository = FavouritesRepository()
+
+    private val pokemonLoaded: Stack<Pair<PokedexStatus, ArrayList<PokemonBasic>>> = Stack()
 
     private var totalPokemonInPokedex: Int = 0;
     var offset: Int = 0
@@ -36,14 +40,11 @@ class PokedexViewModel(application: Application) : AndroidViewModel(application)
     private val _currentEndReached = MutableLiveData<Boolean>()
     val currentEndReached: LiveData<Boolean> get() = _currentEndReached
 
-    private val _pokemon = MutableLiveData<PokemonDetailed>()
-    val pokemon: LiveData<PokemonDetailed> get() = _pokemon
-
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> get() = _error
 
     init {
-        pokemonLoaded.push(ArrayList())
+        pokemonLoaded.push(Pair(PokedexStatus.Main, ArrayList()))
         getPokedexNextPage()
     }
 
@@ -56,7 +57,7 @@ class PokedexViewModel(application: Application) : AndroidViewModel(application)
                     if (totalPokemonInPokedex == 0) {
                         totalPokemonInPokedex = pokeApiRepository.getTotalPokemon()
                     }
-                    val currentLoaded = pokemonLoaded[0]
+                    val currentLoaded = pokemonLoaded[0].second
                     currentLoaded.addAll(pokeApiRepository.getPokemonPaginated(offset, perPage))
                     val newOffset = offset + perPage
                     offset = newOffset
@@ -81,8 +82,8 @@ class PokedexViewModel(application: Application) : AndroidViewModel(application)
                 _canGoNextPage.value = false
                 val results = pokeApiRepository.getPokemonWithSearch(pokemonName)
                 if (results.isNotEmpty()) {
-                    pokemonLoaded.push(ArrayList())
-                    val newPokemon = pokemonLoaded.peek()
+                    pokemonLoaded.push(Pair(PokedexStatus.Search, ArrayList()))
+                    val newPokemon = pokemonLoaded.peek().second
                     newPokemon.addAll(results)
                     _pokemonOnPage.value = newPokemon
                 }
@@ -99,12 +100,35 @@ class PokedexViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
+    fun findFavourites() {
+        viewModelScope.launch {
+            try {
+                val favouritesList = favouritesRepository.getAllFavourites()
+                val filteredToFavouritedOnly = favouritesList.filter { pair ->
+                    pair.second
+                }
+                val pokemonList: ArrayList<PokemonBasic> = arrayListOf()
+                filteredToFavouritedOnly.forEach { pair ->
+                    pokemonList.add(pokeApiRepository.getPokemonWithSearch(pair.first)[0])
+                }
+                if (pokemonList.isNotEmpty()) {
+                    pokemonLoaded.push(Pair(PokedexStatus.Favourites, pokemonList))
+                    _pokemonOnPage.value = pokemonList
+                }
+                _searchComplete.value = true
+                _searchComplete.value = false
+            } catch (error: Throwable) {
+                println(error)
+            }
+        }
+    }
+
     fun popPokemonStack() {
         viewModelScope.launch {
             try {
                 if (pokemonLoaded.size > 1) {
                     pokemonLoaded.pop()
-                    _pokemonOnPage.value = pokemonLoaded.peek()
+                    _pokemonOnPage.value = pokemonLoaded.peek().second
                     if (!lastPageReached && pokemonLoaded.size == 1) {
                         _canGoNextPage.value = true
                     }
@@ -115,13 +139,18 @@ class PokedexViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
-    fun isOnMainPokedex(): Boolean {
-        println(pokemonLoaded.size)
-        return pokemonLoaded.size == 1
+    fun getPokedexStatus(): PokedexStatus {
+        return pokemonLoaded.peek().first
     }
 
     private fun notifyError(message: String) {
         _error.value = message
         _error.value = ""
+    }
+
+    enum class PokedexStatus() {
+        Main,
+        Search,
+        Favourites
     }
 }

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.*
 import android.widget.Toast
 import androidx.activity.addCallback
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -32,7 +33,7 @@ class PokeDexFragment : Fragment() {
         val backButtonCallBack = requireActivity().onBackPressedDispatcher.addCallback(this) {
             if (!searchModal.isGone) {
                 closeSearchMenu()
-            } else if (pokedexViewModel.isOnMainPokedex()) {
+            } else if (pokedexViewModel.getPokedexStatus() == PokedexViewModel.PokedexStatus.Main) {
                 requireActivity().finishAndRemoveTask()
             } else {
                 println("Popping out of search.")
@@ -46,12 +47,32 @@ class PokeDexFragment : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_main, menu)
+        val actionBar = (context as AppCompatActivity).supportActionBar
+        when (pokedexViewModel.getPokedexStatus()) {
+            PokedexViewModel.PokedexStatus.Search -> run {
+                inflater.inflate(R.menu.menu_poppable, menu)
+                actionBar?.setTitle(PokedexViewModel.PokedexStatus.Search.name)
+                true
+            }
+            PokedexViewModel.PokedexStatus.Favourites -> run {
+                inflater.inflate(R.menu.menu_poppable, menu)
+                actionBar?.setTitle(PokedexViewModel.PokedexStatus.Favourites.name)
+                true
+            }
+            else -> {
+                inflater.inflate(R.menu.menu_main, menu)
+                actionBar?.setTitle(getString(R.string.app_name))
+            }
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.action_search -> {
             this.openSearchMenu()
+            true
+        }
+        R.id.action_view_favourites -> {
+            this.findFavourites()
             true
         }
         else -> {
@@ -88,6 +109,10 @@ class PokeDexFragment : Fragment() {
 
     private fun searchPokemon() {
         pokedexViewModel.searchPokemon(etSearchField.text.toString())
+    }
+
+    private fun findFavourites() {
+        pokedexViewModel.findFavourites()
     }
 
     private fun closeSearchMenu() {

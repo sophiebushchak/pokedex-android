@@ -11,6 +11,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withTimeout
 
 class FavouritesRepository {
@@ -25,6 +26,9 @@ class FavouritesRepository {
 
     private val _favouriteSuccess = MutableLiveData<Pair<String, Boolean>?>()
     val favourited: LiveData<Pair<String, Boolean>?> get() = _favouriteSuccess
+
+    private val _allFavourites = MutableLiveData<List<Pair<String, Boolean>>>()
+    val allFavourites: MutableLiveData<List<Pair<String, Boolean>>> get() = _allFavourites
 
     init {
         this.user = authentication.getCurrentUser()
@@ -80,12 +84,18 @@ class FavouritesRepository {
         }
     }
 
-    //TODO
-    suspend fun getAllFavourites() {
-        try {
-
-        } catch(e: Error) {
-
+    suspend fun getAllFavourites(): List<Pair<String, Boolean>> {
+        return try {
+            val favouriteCollection = firestore.collection(user.uid)
+            val result = withTimeout(5_000) {
+                favouriteCollection.get().await()
+            }
+            result.map { documentSnapshot ->
+                Pair(documentSnapshot.id, documentSnapshot.data["isFavourite"])
+            } as List<Pair<String, Boolean>>
+        } catch (e: Error) {
+            println(e)
+            mutableListOf()
         }
     }
 }
