@@ -14,6 +14,7 @@ import com.example.pokedata.models.PokemonBasic
 import com.example.pokedata.models.PokemonDetailed
 import com.example.pokedata.rest.PokeApiConfig
 import com.example.pokedata.vm.PokemonDetailViewModel
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.fragment_pokemon_detail.*
@@ -39,6 +40,7 @@ class PokemonDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         observePokemon()
         observeEvolutionChain()
+        observeFavouriteStatus()
         val viewPager: ViewPager2 = pokemonDetailPager
         viewPager.adapter = pokemonDetailAdapter
         tabLayout = pokemonDetailTabLayout
@@ -52,7 +54,7 @@ class PokemonDetailFragment : Fragment() {
         }.attach()
     }
 
-    private fun updateViews(pokemon: PokemonDetailed) {
+    private fun updatePokemonInformation(pokemon: PokemonDetailed) {
         val context = requireContext()
         Glide.with(context).load(PokeApiConfig.HOST + pokemon.sprites.front).into(ivPokemonDetail)
         tvPokemonDetailName.text = pokemon.pokemonName
@@ -60,15 +62,41 @@ class PokemonDetailFragment : Fragment() {
         tvPokemonDetailPokedexNumber.text = "#${pokemon.pokedexNumber.toString().padStart(3, '0')}"
         tvPokemonDetailPrimaryType.text = pokemon.primaryType.capitalize(Locale.ENGLISH)
         val primaryType = PokemonBasic.PokemonType.valueOf(pokemon.primaryType)
-        tvPokemonDetailPrimaryType.setBackgroundColor(resources.getColor(primaryType.typeColor, context.theme))
-        toplayout.setBackgroundColor(context.resources.getColor(primaryType.typeBackground, context.theme))
+        tvPokemonDetailPrimaryType.setBackgroundColor(
+            resources.getColor(
+                primaryType.typeColor,
+                context.theme
+            )
+        )
+        toplayout.setBackgroundColor(
+            context.resources.getColor(
+                primaryType.typeBackground,
+                context.theme
+            )
+        )
         if (!pokemon.secondaryType.isNullOrBlank()) {
             tvPokemonDetailSecondaryType.isGone = false
             val secondaryType = PokemonBasic.PokemonType.valueOf(pokemon.secondaryType)
-            tvPokemonDetailSecondaryType.setBackgroundColor(context.resources.getColor(secondaryType.typeColor, context.theme))
+            tvPokemonDetailSecondaryType.setBackgroundColor(
+                context.resources.getColor(
+                    secondaryType.typeColor,
+                    context.theme
+                )
+            )
             tvPokemonDetailSecondaryType.text = pokemon.secondaryType.capitalize(Locale.ENGLISH)
         } else {
             tvPokemonDetailSecondaryType.isGone = true
+        }
+    }
+
+    private fun updateFavouriteButton(pokemonName: String, isFavourite: Boolean) {
+        if (isFavourite) {
+            ivFavouriteButton.setImageResource(R.drawable.ic_heart)
+        } else {
+            ivFavouriteButton.setImageResource(R.drawable.ic_heart_outline)
+        }
+        ivFavouriteButton.setOnClickListener {
+            viewModel.setPokemonFavouriteStatus(pokemonName, !isFavourite)
         }
     }
 
@@ -76,9 +104,10 @@ class PokemonDetailFragment : Fragment() {
         viewModel.currentPokemon.observe(viewLifecycleOwner, {
             if (it != null) {
                 pokemonDetailAdapter.pokemon = it
-                updateViews(it)
+                updatePokemonInformation(it)
                 pokemonDetailAdapter.notifyDataSetChanged()
                 viewModel.getPokemonEvolutionChain(it.pokedexNumber)
+                viewModel.getPokemonFavouriteStatus(it.pokemonName)
             }
         })
     }
@@ -95,6 +124,24 @@ class PokemonDetailFragment : Fragment() {
             if (it != null) {
                 viewModel.getPokemonDetailed(it)
                 tabLayout.selectTab(tabLayout.getTabAt(0))
+            }
+        })
+    }
+
+    private fun observeFavouriteStatus() {
+        viewModel.favouriteStatus.observe(viewLifecycleOwner, { favouriteStatus ->
+            if (favouriteStatus != null) {
+                updateFavouriteButton(favouriteStatus.first, favouriteStatus.second)
+            }
+        })
+        viewModel.favourited.observe(viewLifecycleOwner, {
+            if (it != null) {
+                var message = "Added ${it.first} to favourites"
+                if (!it.second) {
+                    message = "Removed ${it.first} from favourites"
+                }
+                Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show()
+                updateFavouriteButton(it.first, it.second)
             }
         })
     }
