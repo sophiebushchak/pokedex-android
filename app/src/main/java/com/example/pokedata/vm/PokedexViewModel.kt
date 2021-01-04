@@ -79,10 +79,13 @@ class PokedexViewModel(application: Application) : AndroidViewModel(application)
         viewModelScope.launch {
             try {
                 _canGoNextPage.value = false
-                pokemonLoaded.push(ArrayList())
-                val results = pokemonLoaded.peek()
-                results.addAll(pokeApiRepository.getPokemonWithSearch(pokemonName))
-                _pokemonOnPage.value = results
+                val results = pokeApiRepository.getPokemonWithSearch(pokemonName)
+                if (results.isNotEmpty()) {
+                    pokemonLoaded.push(ArrayList())
+                    val newPokemon = pokemonLoaded.peek()
+                    newPokemon.addAll(results)
+                    _pokemonOnPage.value = newPokemon
+                }
                 _searchComplete.value = true
                 _searchComplete.value = false;
             } catch (error: PokeApiRepository.PokeApiError) {
