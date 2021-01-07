@@ -27,7 +27,7 @@
 
         <TextView
             android:id="@+id/tvPokemonDetailName"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
@@ -39,7 +39,6 @@
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline1"
             android:textColor="@color/design_default_color_on_primary"
             android:textSize="24sp"
-            app:layout_constraintEnd_toStartOf="@+id/tvPokemonDetailPokedexNumber"
             app:layout_constraintStart_toStartOf="@+id/guideline4"
             app:layout_constraintTop_toTopOf="@+id/topLayoutContentStart"
             tools:text="Bulbasaur" />
@@ -102,6 +101,17 @@
             app:layout_constraintStart_toStartOf="@+id/tvPokemonDetailPrimaryType"
             app:layout_constraintTop_toBottomOf="@+id/tvPokemonDetailPrimaryType"
             tools:text="Grass" />
+
+        <ImageView
+            android:id="@+id/ivFavouriteButton"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/ic_heart_outline"
+            android:tint="#FB9A9A"
+            app:layout_constraintBottom_toBottomOf="@+id/tvPokemonDetailName"
+            app:layout_constraintStart_toEndOf="@+id/tvPokemonDetailName"
+            app:layout_constraintTop_toTopOf="@+id/tvPokemonDetailName" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline4"
@@ -199,17 +209,6 @@
         app:layout_constraintTop_toTopOf="@+id/imageTop"
         app:srcCompat="?android:attr/textSelectHandle"
         tools:src="@tools:sample/avatars" />
-
-    <ImageView
-        android:id="@+id/ivFavouriteButton"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:src="@drawable/ic_heart_outline"
-        android:tint="#FB9A9A"
-        app:layout_constraintBottom_toTopOf="@+id/topLayoutEnd"
-        app:layout_constraintEnd_toStartOf="@+id/guideline2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imageTop" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"

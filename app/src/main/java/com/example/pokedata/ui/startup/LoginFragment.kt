@@ -6,13 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.pokedata.R
 import com.example.pokedata.vm.AuthenticationViewModel
+import com.example.pokedata.vm.PokedexViewModel
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_login.*
+import kotlinx.android.synthetic.main.fragment_pokedex.*
 
 class LoginFragment : Fragment() {
     private val viewModel: AuthenticationViewModel by activityViewModels()
@@ -27,6 +31,10 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        val backButtonCallBack = requireActivity().onBackPressedDispatcher.addCallback(this) {
+            requireActivity().finishAndRemoveTask()
+        }
+        backButtonCallBack.isEnabled = true
         return inflater.inflate(R.layout.fragment_login, container, false)
     }
 
@@ -80,7 +88,11 @@ class LoginFragment : Fragment() {
     }
 
     private fun attemptSignUp() {
-        viewModel.createUser(etSignUpEmail.text.toString(), etSignUpPassword.text.toString(), etSignUpPasswordConfirm.text.toString())
+        viewModel.createUser(
+            etSignUpEmail.text.toString(),
+            etSignUpPassword.text.toString(),
+            etSignUpPasswordConfirm.text.toString()
+        )
     }
 
     private fun attemptLogin() {
@@ -90,27 +102,33 @@ class LoginFragment : Fragment() {
     private fun observeAuthentication() {
         viewModel.authenticationError.observe(viewLifecycleOwner, {
             if (!it.isNullOrBlank()) {
-                indicateError(it)
+                notify(it)
             }
         })
         viewModel.error.observe(viewLifecycleOwner, {
             if (!it.isNullOrBlank()) {
-                indicateError(it)
+                notify(it)
             }
         })
         viewModel.loginSuccess.observe(viewLifecycleOwner, {
             if (!it.isNullOrBlank()) {
-                continueFromAuthentication()
+                continueAfterAuthentication()
+                notify(it)
+            }
+        })
+        viewModel.createUserSuccess.observe(viewLifecycleOwner, {
+            if (!it.isNullOrBlank()) {
+                notify(it)
             }
         })
     }
 
-    private fun continueFromAuthentication() {
+    private fun continueAfterAuthentication() {
         findNavController().navigate(R.id.action_loginFragment_to_pokeDexFragment2)
     }
 
-    private fun indicateError(text: String) {
-        Toast.makeText(requireContext(), text, Toast.LENGTH_SHORT).show()
+    private fun notify(text: String) {
+        Snackbar.make(requireView(), text, Snackbar.LENGTH_SHORT).show()
     }
 
 }

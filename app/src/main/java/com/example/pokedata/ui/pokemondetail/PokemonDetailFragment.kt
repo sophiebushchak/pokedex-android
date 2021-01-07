@@ -1,10 +1,12 @@
 package com.example.pokedata.ui.pokemondetail
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
 import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.widget.ViewPager2
@@ -24,9 +26,12 @@ import java.util.*
  * A simple [Fragment] subclass as the second destination in the navigation.
  */
 class PokemonDetailFragment : Fragment() {
+    private val TAG = "PokemonDetailFragment"
+
     private val pokemonDetailAdapter = PokemonDetailAdapter(null, null)
     private val viewModel: PokemonDetailViewModel by activityViewModels()
     private lateinit var tabLayout: TabLayout
+    private var showShiny = false;
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,6 +46,7 @@ class PokemonDetailFragment : Fragment() {
         observePokemon()
         observeEvolutionChain()
         observeFavouriteStatus()
+        observeError()
         val viewPager: ViewPager2 = pokemonDetailPager
         viewPager.adapter = pokemonDetailAdapter
         tabLayout = pokemonDetailTabLayout
@@ -55,8 +61,13 @@ class PokemonDetailFragment : Fragment() {
     }
 
     private fun updatePokemonInformation(pokemon: PokemonDetailed) {
+        this.showShiny = false
         val context = requireContext()
-        Glide.with(context).load(PokeApiConfig.HOST + pokemon.sprites.front).into(ivPokemonDetail)
+        switchSprite(pokemon)
+        this.ivPokemonDetail.setOnClickListener {
+            this.showShiny = !this.showShiny
+            switchSprite(pokemon)
+        }
         tvPokemonDetailName.text = pokemon.pokemonName
         tvPokemonDetailGenus.text = pokemon.genus
         tvPokemonDetailPokedexNumber.text = "#${pokemon.pokedexNumber.toString().padStart(3, '0')}"
@@ -87,6 +98,8 @@ class PokemonDetailFragment : Fragment() {
         } else {
             tvPokemonDetailSecondaryType.isGone = true
         }
+        val actionBar = (context as AppCompatActivity).supportActionBar
+        actionBar?.title = pokemon.pokemonName
     }
 
     private fun updateFavouriteButton(pokemonName: String, isFavourite: Boolean) {
@@ -100,9 +113,26 @@ class PokemonDetailFragment : Fragment() {
         }
     }
 
+    private fun switchSprite(pokemon: PokemonDetailed) {
+        if (!this.showShiny) {
+            Glide.with(requireContext()).load(PokeApiConfig.HOST + pokemon.sprites.front).into(ivPokemonDetail)
+        } else {
+            Glide.with(requireContext()).load(PokeApiConfig.HOST + pokemon.sprites.frontShiny).into(ivPokemonDetail)
+        }
+    }
+
+    private fun observeError() {
+        viewModel.error.observe(viewLifecycleOwner, {
+            if (it != null) {
+                Snackbar.make(requireView(), it, Snackbar.LENGTH_SHORT).show()
+            }
+        })
+    }
+
     private fun observePokemon() {
         viewModel.currentPokemon.observe(viewLifecycleOwner, {
             if (it != null) {
+                Log.d(TAG, "Received selected Pokemon: $it")
                 pokemonDetailAdapter.pokemon = it
                 updatePokemonInformation(it)
                 pokemonDetailAdapter.notifyDataSetChanged()
@@ -115,13 +145,14 @@ class PokemonDetailFragment : Fragment() {
     private fun observeEvolutionChain() {
         viewModel.currentEvolutionChain.observe(viewLifecycleOwner, {
             if (it != null) {
-                println(it)
+                Log.d(TAG, "Received Pokemon evolution chain: $it")
                 pokemonDetailAdapter.evolutionChain = it
                 pokemonDetailAdapter.notifyDataSetChanged()
             }
         })
         pokemonDetailAdapter.pokemonEvolutionSelected.observe(viewLifecycleOwner, {
             if (it != null) {
+                Log.d(TAG, "Clicked on evolution in evolution chain with Pokedex number: $it")
                 viewModel.getPokemonDetailed(it)
                 tabLayout.selectTab(tabLayout.getTabAt(0))
             }
@@ -131,11 +162,13 @@ class PokemonDetailFragment : Fragment() {
     private fun observeFavouriteStatus() {
         viewModel.favouriteStatus.observe(viewLifecycleOwner, { favouriteStatus ->
             if (favouriteStatus != null) {
+                Log.d(TAG, "Received favourite status of selected Pokemon: $favouriteStatus")
                 updateFavouriteButton(favouriteStatus.first, favouriteStatus.second)
             }
         })
         viewModel.favourited.observe(viewLifecycleOwner, {
             if (it != null) {
+                Log.d(TAG, "Received favourited livedata: $it")
                 var message = "Added ${it.first} to favourites"
                 if (!it.second) {
                     message = "Removed ${it.first} from favourites"

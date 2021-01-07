@@ -3,5 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/pokedex"
+            android:icon="@drawable/ic_pokeball"
+            android:title="@string/pokedex"/>
+        <item
+            android:id="@+id/action_logout"
+            android:icon="@drawable/ic_logout"
+            android:title="@string/action_logout"/>
+    </group>
 
 </menu>

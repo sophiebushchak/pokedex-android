@@ -15,17 +15,17 @@ class PokemonDetailViewModel(application: Application) : AndroidViewModel(applic
     private val pokeApiRepository = PokeApiRepository(application.applicationContext)
     private val favouritesRepository = FavouritesRepository()
 
-    private val _error = MutableLiveData<String>()
-    val error: LiveData<String> get() = _error
+    private val _error = MutableLiveData<String?>()
+    val error: LiveData<String?> get() = _error
 
     val favouriteStatus: LiveData<Pair<String, Boolean>?> get() = favouritesRepository.favouriteStatus
     val favourited: LiveData<Pair<String, Boolean>?> get() = favouritesRepository.favourited
 
-    private val _currentPokemon = MutableLiveData<PokemonDetailed>()
-    val currentPokemon: LiveData<PokemonDetailed> get() = _currentPokemon
+    private val _currentPokemon = MutableLiveData<PokemonDetailed?>()
+    val currentPokemon: LiveData<PokemonDetailed?> get() = _currentPokemon
 
-    private val _currentEvolutionChain = MutableLiveData<PokemonEvolutionChain>()
-    val currentEvolutionChain: LiveData<PokemonEvolutionChain> get() = _currentEvolutionChain
+    private val _currentEvolutionChain = MutableLiveData<PokemonEvolutionChain?>()
+    val currentEvolutionChain: LiveData<PokemonEvolutionChain?> get() = _currentEvolutionChain
 
     fun getPokemonDetailed(pokedexNumber: Int) {
         viewModelScope.launch {
@@ -33,9 +33,10 @@ class PokemonDetailViewModel(application: Application) : AndroidViewModel(applic
                 val pokemon = pokeApiRepository.getPokemonByPokedexNumber(pokedexNumber)
                 println(pokemon)
                 _currentPokemon.value = pokemon
+                _currentPokemon.value = null
             } catch (error: PokeApiRepository.PokeApiError) {
                 println(error)
-                error.message?.let { notifyError(it) }
+                notifyError(error.message)
             }
         }
     }
@@ -46,6 +47,7 @@ class PokemonDetailViewModel(application: Application) : AndroidViewModel(applic
                 favouritesRepository.getFavouriteStatus(pokemonName)
             } catch (error: Throwable) {
                 println(error)
+                notifyError(error.message)
             }
         }
     }
@@ -56,6 +58,7 @@ class PokemonDetailViewModel(application: Application) : AndroidViewModel(applic
                 favouritesRepository.setFavouriteStatus(pokemonName, isFavourite)
             } catch(error: Throwable) {
                 println(error)
+                notifyError(error.message)
             }
         }
     }
@@ -65,6 +68,7 @@ class PokemonDetailViewModel(application: Application) : AndroidViewModel(applic
             try {
                 val chain = pokeApiRepository.getPokemonEvolutionChain(pokedexNumber)
                 _currentEvolutionChain.value = chain
+                _currentEvolutionChain.value = null
             } catch (error: PokeApiRepository.PokeApiError) {
                 println(error.stackTrace)
                 error.message?.let { notifyError(it) }
@@ -72,7 +76,8 @@ class PokemonDetailViewModel(application: Application) : AndroidViewModel(applic
         }
     }
 
-    private fun notifyError(message: String) {
+    private fun notifyError(message: String?) {
         _error.value = message
+        _error.value = null
     }
 }

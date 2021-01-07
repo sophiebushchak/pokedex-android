@@ -21,22 +21,16 @@ class FavouritesRepository {
     private val firestore = Firebase.firestore
     private val authentication = Authentication()
 
-    private val user: FirebaseUser
-    private val userCollection: CollectionReference
-
     private val _favouriteStatus = MutableLiveData<Pair<String, Boolean>?>()
     val favouriteStatus: LiveData<Pair<String, Boolean>?> get() = _favouriteStatus
 
     private val _favouriteSuccess = MutableLiveData<Pair<String, Boolean>?>()
     val favourited: LiveData<Pair<String, Boolean>?> get() = _favouriteSuccess
 
-    init {
-        this.user = authentication.getCurrentUser()
-        userCollection = firestore.collection(user.uid)
-    }
-
     suspend fun getFavouriteStatus(pokemonName: String) {
         try {
+            val user = authentication.getCurrentUser() ?: throw Exception("Not logged in.")
+            val userCollection = firestore.collection(user.uid)
             val favouriteStatus = userCollection.document(pokemonName)
             withTimeout(5_000) {
                 favouriteStatus
@@ -49,6 +43,7 @@ class FavouritesRepository {
                                 if (map.contains("isFavourite")) {
                                     dataMap["isFavourite"]?.let {
                                         _favouriteStatus.value = Pair(pokemonName, it)
+                                        _favouriteStatus.value = null
                                     }
                                 }
                             } ?: run {
@@ -75,6 +70,8 @@ class FavouritesRepository {
 
     suspend fun setFavouriteStatus(pokemonName: String, isFavourite: Boolean) {
         try {
+            val user = authentication.getCurrentUser() ?: throw Exception("Not logged in.")
+            val userCollection = firestore.collection(user.uid)
             val favouriteStatus = userCollection.document(pokemonName)
             withTimeout(5_000) {
                 favouriteStatus.set(
@@ -95,6 +92,8 @@ class FavouritesRepository {
 
     suspend fun getListOfAllFavouritesByName(): List<Pair<String, Boolean>> {
         return try {
+            val user = authentication.getCurrentUser() ?: throw Exception("Not logged in.")
+            val userCollection = firestore.collection(user.uid)
             val result = withTimeout(5_000) {
                 userCollection.get().await()
             }

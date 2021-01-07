@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="150dp"
+    android:background="@color/pokered">
+
+    <ImageView
+        android:id="@+id/ivHeaderLogo"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="24dp"
+        app:layout_constraintBottom_toTopOf="@+id/tvHeaderLoggedInas"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:srcCompat="@drawable/ic_pokeball"
+        app:tint="#FFFFFF" />
+
+    <TextView
+        android:id="@+id/tvHeaderTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:fontFamily="@font/lato_bold"
+        android:text="@string/app_name"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/ivHeaderLogo"
+        app:layout_constraintStart_toEndOf="@+id/ivHeaderLogo"
+        app:layout_constraintTop_toTopOf="@+id/ivHeaderLogo" />
+
+    <TextView
+        android:id="@+id/tvHeaderLoggedInas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/tvLoggedInAs"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/ivHeaderLogo"
+        app:layout_constraintTop_toBottomOf="@+id/ivHeaderLogo" />
+
+    <TextView
+        android:id="@+id/tvHeaderEmail"
+        android:layout_width="258dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="test@gmail.com"
+        android:textAlignment="textStart"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="@+id/tvHeaderLoggedInas"
+        app:layout_constraintStart_toEndOf="@+id/tvHeaderLoggedInas"
+        app:layout_constraintTop_toTopOf="@+id/tvHeaderLoggedInas"
+        tools:text="test@gmail.com" />
+</androidx.constraintlayout.widget.ConstraintLayout>

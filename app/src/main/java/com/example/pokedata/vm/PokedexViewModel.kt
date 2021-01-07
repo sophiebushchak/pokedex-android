@@ -101,6 +101,7 @@ class PokedexViewModel(application: Application) : AndroidViewModel(application)
     fun findFavourites() {
         viewModelScope.launch {
             try {
+                _canGoNextPage.value = false
                 val favouritesList = favouritesRepository.getListOfAllFavouritesByName()
                 val filteredToFavouritedOnly = favouritesList.filter { pair ->
                     pair.second
@@ -110,6 +111,7 @@ class PokedexViewModel(application: Application) : AndroidViewModel(application)
                     pokemonList.add(pokeApiRepository.getPokemonWithSearch(pair.first)[0])
                 }
                 if (pokemonList.isNotEmpty()) {
+                    pokemonList.sortBy { it.pokedexNumber }
                     pokemonLoaded.push(Pair(PokedexStatus.Favourites, pokemonList))
                     _pokemonOnPage.value = pokemonList
                 }
@@ -117,6 +119,7 @@ class PokedexViewModel(application: Application) : AndroidViewModel(application)
                 _searchComplete.value = false
             } catch (error: Throwable) {
                 println(error)
+                error.message?.let {notifyError(it)}
             }
         }
     }

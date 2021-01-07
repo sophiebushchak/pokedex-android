@@ -2,6 +2,7 @@ package com.example.pokedata.ui.startup
 
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import com.example.pokedata.R
 import com.example.pokedata.vm.AuthenticationViewModel
 
 class WelcomeSplashFragment : Fragment() {
+    private val TAG = "SplashFragment"
     private val viewModel: AuthenticationViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,7 +33,6 @@ class WelcomeSplashFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeLoggedInStatus()
-        viewModel.getLoggedInStatus()
     }
 
     override fun onResume() {
@@ -46,6 +47,7 @@ class WelcomeSplashFragment : Fragment() {
 
     private fun observeLoggedInStatus() {
         viewModel.isLoggedIn.observe(viewLifecycleOwner, {
+            Log.d(TAG, "login status: $it")
             if (it) {
                 val splashEndHandler = Handler()
                 splashEndHandler.postDelayed(
