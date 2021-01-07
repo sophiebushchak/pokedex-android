@@ -3,51 +3,51 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/welcomeSplashFragment">
+    app:startDestination="@id/splashscreen">
     <fragment
-        android:id="@+id/pokeDexFragment2"
+        android:id="@+id/pokedex"
         android:name="com.example.pokedata.ui.pokedex.PokeDexFragment"
         android:label="fragment_pokedex"
         tools:layout="@layout/fragment_pokedex" >
         <action
             android:id="@+id/action_pokeDexFragment2_to_pokemonDetailFragment"
-            app:destination="@id/pokemonDetailFragment"
+            app:destination="@id/pokemon_detail"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <action
             android:id="@+id/action_pokeDexFragment2_self"
-            app:destination="@id/pokeDexFragment2"
+            app:destination="@id/pokedex"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
     <fragment
-        android:id="@+id/pokemonDetailFragment"
+        android:id="@+id/pokemon_detail"
         android:name="com.example.pokedata.ui.pokemondetail.PokemonDetailFragment"
         android:label="fragment_pokemon_detail"
         tools:layout="@layout/fragment_pokemon_detail" />
     <fragment
-        android:id="@+id/welcomeSplashFragment"
+        android:id="@+id/splashscreen"
         android:name="com.example.pokedata.ui.startup.WelcomeSplashFragment"
         android:label="fragment_welcome_splash"
         tools:layout="@layout/fragment_welcome_splash" >
         <action
             android:id="@+id/action_welcomeSplashFragment_to_pokeDexFragment2"
-            app:destination="@id/pokeDexFragment2" />
+            app:destination="@id/pokedex" />
         <action
             android:id="@+id/action_welcomeSplashFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            app:destination="@id/login" />
     </fragment>
     <fragment
-        android:id="@+id/loginFragment"
+        android:id="@+id/login"
         android:name="com.example.pokedata.ui.startup.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
             android:id="@+id/action_loginFragment_to_pokeDexFragment2"
-            app:destination="@id/pokeDexFragment2" />
+            app:destination="@id/pokedex" />
     </fragment>
 </navigation>
