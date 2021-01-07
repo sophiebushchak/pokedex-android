@@ -5,10 +5,8 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.pokedata.R
 import com.example.pokedata.firebase.FavouritesRepository
 import com.example.pokedata.models.PokemonBasic
-import com.example.pokedata.models.PokemonDetailed
 import com.example.pokedata.rest.PokeApiRepository
 import kotlinx.coroutines.launch
 import java.util.*
@@ -103,7 +101,7 @@ class PokedexViewModel(application: Application) : AndroidViewModel(application)
     fun findFavourites() {
         viewModelScope.launch {
             try {
-                val favouritesList = favouritesRepository.getAllFavourites()
+                val favouritesList = favouritesRepository.getListOfAllFavouritesByName()
                 val filteredToFavouritedOnly = favouritesList.filter { pair ->
                     pair.second
                 }

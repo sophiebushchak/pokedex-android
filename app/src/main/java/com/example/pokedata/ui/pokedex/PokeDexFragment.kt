@@ -16,6 +16,7 @@ import com.example.pokedata.models.PokemonBasic
 import com.example.pokedata.utils.EndlessRecyclerViewScroll
 import com.example.pokedata.vm.PokedexViewModel
 import com.example.pokedata.vm.PokemonDetailViewModel
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_pokedex.*
 
 class PokeDexFragment : Fragment() {
@@ -162,7 +163,7 @@ class PokeDexFragment : Fragment() {
     private fun observeError() {
         pokedexViewModel.error.observe(viewLifecycleOwner, {
             if (!it.isNullOrBlank()) {
-                Toast.makeText(activity, it, Toast.LENGTH_SHORT).show()
+                Snackbar.make(requireView(), it, Snackbar.LENGTH_SHORT).show()
             }
         })
     }

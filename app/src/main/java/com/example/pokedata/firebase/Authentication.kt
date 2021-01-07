@@ -64,7 +64,7 @@ class Authentication() {
         if (!isLoggedIn()) {
             throw AuthenticationException("Not logged in!")
         } else {
-            //Checked if logged in, so user is guaranteed to be present
+            //Checked if logged in, so user is now guaranteed to be present
             return Firebase.auth.currentUser!!
         }
     }

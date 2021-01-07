@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
@@ -13,13 +14,15 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withTimeout
+import java.lang.Exception
 
 class FavouritesRepository {
     private val TAG: String = "FirestoreFavourites"
     private val firestore = Firebase.firestore
     private val authentication = Authentication()
-    private lateinit var user: FirebaseUser
-    private lateinit var favouritesDocument: DocumentReference
+
+    private val user: FirebaseUser
+    private val userCollection: CollectionReference
 
     private val _favouriteStatus = MutableLiveData<Pair<String, Boolean>?>()
     val favouriteStatus: LiveData<Pair<String, Boolean>?> get() = _favouriteStatus
@@ -27,16 +30,14 @@ class FavouritesRepository {
     private val _favouriteSuccess = MutableLiveData<Pair<String, Boolean>?>()
     val favourited: LiveData<Pair<String, Boolean>?> get() = _favouriteSuccess
 
-    private val _allFavourites = MutableLiveData<List<Pair<String, Boolean>>>()
-    val allFavourites: MutableLiveData<List<Pair<String, Boolean>>> get() = _allFavourites
-
     init {
         this.user = authentication.getCurrentUser()
+        userCollection = firestore.collection(user.uid)
     }
 
     suspend fun getFavouriteStatus(pokemonName: String) {
         try {
-            val favouriteStatus = firestore.collection(user.uid).document(pokemonName)
+            val favouriteStatus = userCollection.document(pokemonName)
             withTimeout(5_000) {
                 favouriteStatus
                     .get()
@@ -63,41 +64,51 @@ class FavouritesRepository {
                         Log.e(TAG, "Failed to get document with exception", exception)
                     }
             }
-        } catch (e: Throwable) {
-            println(e)
+        } catch (error: Throwable) {
+            println(error)
+            throw FavouritesRepositoryException(
+                "Could not get favourite status for Pokemon $pokemonName",
+                error
+            )
         }
     }
 
     suspend fun setFavouriteStatus(pokemonName: String, isFavourite: Boolean) {
         try {
-            val favouriteStatus = firestore.collection(user.uid).document(pokemonName)
+            val favouriteStatus = userCollection.document(pokemonName)
             withTimeout(5_000) {
                 favouriteStatus.set(
                     mutableMapOf(Pair("isFavourite", isFavourite))
-                ).addOnSuccessListener { result ->
+                ).addOnSuccessListener { _ ->
                     _favouriteSuccess.value = Pair(pokemonName, isFavourite)
                     _favouriteSuccess.value = null
                 }
             }
-        } catch (e: Throwable) {
-            println(e)
+        } catch (error: Throwable) {
+            println(error)
+            throw FavouritesRepositoryException(
+                "Could not set favourite status for Pokemon $pokemonName.",
+                error
+            )
         }
     }
 
-    suspend fun getAllFavourites(): List<Pair<String, Boolean>> {
+    suspend fun getListOfAllFavouritesByName(): List<Pair<String, Boolean>> {
         return try {
-            val favouriteCollection = firestore.collection(user.uid)
             val result = withTimeout(5_000) {
-                favouriteCollection.get().await()
+                userCollection.get().await()
             }
             result.map { documentSnapshot ->
                 Pair(documentSnapshot.id, documentSnapshot.data["isFavourite"])
             } as List<Pair<String, Boolean>>
-        } catch (e: Error) {
-            println(e)
-            mutableListOf()
+        } catch (error: Throwable) {
+            println(error)
+            throw FavouritesRepositoryException("Could not get all favourites.", error)
         }
     }
+
+    inner class FavouritesRepositoryException(message: String, cause: Throwable) :
+        Throwable(message, cause)
 }
 
 

@@ -1,4 +1,4 @@
-package com.example.pokedata.ui.login
+package com.example.pokedata.ui.startup
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

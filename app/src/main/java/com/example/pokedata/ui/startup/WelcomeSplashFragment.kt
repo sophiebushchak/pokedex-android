@@ -1,4 +1,4 @@
-package com.example.pokedata.ui.welcomesplash
+package com.example.pokedata.ui.startup
 
 import android.os.Bundle
 import android.os.Handler
