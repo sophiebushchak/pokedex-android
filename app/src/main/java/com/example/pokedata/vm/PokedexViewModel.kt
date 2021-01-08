@@ -5,6 +5,8 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.pokedata.App
+import com.example.pokedata.R
 import com.example.pokedata.firebase.FavouritesRepository
 import com.example.pokedata.models.PokemonBasic
 import com.example.pokedata.rest.PokeDataRepository
@@ -18,6 +20,7 @@ import kotlin.collections.ArrayList
 class PokedexViewModel(application: Application) : AndroidViewModel(application) {
     private val pokeApiRepository = PokeDataRepository(application.applicationContext)
     private val favouritesRepository: FavouritesRepository = FavouritesRepository()
+    private val resources = App.getRes()
 
     /**
      * Pokemon loaded are tracked by a stack of pairs with the first value in the pair being an indicator
@@ -82,7 +85,7 @@ class PokedexViewModel(application: Application) : AndroidViewModel(application)
                         _currentEndReached.value = lastPageReached
                     }
                 } else {
-                    throw Throwable("Attempted to get next page even though last page was already reached.")
+                    throw Throwable(resources.getString(R.string.lastPageReachedError))
                 }
             } catch (error: Throwable) {
                 println(error)
@@ -140,6 +143,8 @@ class PokedexViewModel(application: Application) : AndroidViewModel(application)
                     pokemonList.sortBy { it.pokedexNumber }
                     pokemonLoaded.push(Pair(PokedexStatus.Favourites, pokemonList))
                     _pokemonOnPage.value = pokemonList
+                } else {
+                    _error.value = resources.getString(R.string.noFavourites)
                 }
                 _searchComplete.value = true
                 _searchComplete.value = false

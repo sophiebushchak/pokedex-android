@@ -73,7 +73,7 @@ class PokemonDetailFragment : Fragment() {
         }
         tvPokemonDetailName.text = pokemon.pokemonName
         tvPokemonDetailGenus.text = pokemon.genus
-        tvPokemonDetailPokedexNumber.text = "#${pokemon.pokedexNumber.toString().padStart(3, '0')}"
+        tvPokemonDetailPokedexNumber.text = getString(R.string.pokedexNumber, pokemon.pokedexNumber.toString().padStart(3, '0'))
         tvPokemonDetailPrimaryType.text = pokemon.primaryType.capitalize(Locale.ENGLISH)
         val primaryType = PokemonBasic.PokemonType.valueOf(pokemon.primaryType)
         tvPokemonDetailPrimaryType.setBackgroundColor(
@@ -176,9 +176,9 @@ class PokemonDetailFragment : Fragment() {
         viewModel.favourited.observe(viewLifecycleOwner, {
             if (it != null) {
                 Log.d(TAG, "Received favourited livedata: $it")
-                var message = "Added ${it.first} to favourites"
+                var message = getString(R.string.favouritedMessage, getString(R.string.favouriteAdded), it.first, getString(R.string.favouriteTo))
                 if (!it.second) {
-                    message = "Removed ${it.first} from favourites"
+                    message = getString(R.string.favouritedMessage, getString(R.string.favouriteRemoved), it.first, getString(R.string.favouriteFrom))
                 }
                 Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show()
                 updateFavouriteButton(it.first, it.second)

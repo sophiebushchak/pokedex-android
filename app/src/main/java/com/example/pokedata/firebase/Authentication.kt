@@ -79,7 +79,7 @@ class Authentication {
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     Log.d(TAG, "loginUser:success")
-                    _loginSuccess.value = resources.getString(R.string.loginSuccess)
+                    _loginSuccess.value = resources.getString(R.string.loginSuccess, email)
                     _loginSuccess.value = null
                 } else {
                     Log.w(TAG, "loginUser:failure", task.exception)

@@ -1,20 +1,31 @@
 <resources>
     <string name="app_name">PokéData</string>
 
+
     <!--Pokemon Detail Information-->
+    <string name="pokedexNumber">#%s</string>
     <string name="tvHeightLabel">Height</string>
+    <string name="tvHeightValue">%s m</string>
     <string name="tvWeightLabel">Weight</string>
+    <string name="tvWeightValue">%s kg</string>
     <string name="action_search">Search</string>
     <string name="tvUndefined">/???</string>
+    <string name="favouriteAdded">Added</string>
+    <string name="favouriteRemoved">Removed</string>
+    <string name="favouriteTo">to</string>
+    <string name="favouriteFrom">from</string>
+    <string name="favouritedMessage">%s %s %s favourites</string>
 
     <!--General errors-->
     <string name="timedOutMessage">Could not connect to the server. Please check your internet connection.</string>
     <string name="somethingWentWrong">Something went wrong.</string>
     <string name="somethingWentWrongDuring">Something went wrong %s</string>
 
+
     <!--Splash Screen-->
     <string name="tvSplashTitle">PokéData</string>
     <string name="tvSplashSubtitle">A Pokédex for Pokémon</string>
+
 
     <!--Sign up/Log In-->
     <string name="tvLoginHelp">Please enter an email and password to log in.</string>
@@ -27,10 +38,12 @@
     <string name="tvHaveAccount">Already have an account?</string>
     <string name="tvDontHaveAccount">Don\'t have an account?</string>
 
+
     <!--Drawer-->
     <string name="pokedex">Pokédex</string>
     <string name="action_logout">Log Out</string>
     <string name="tvLoggedInAs">Logged in as:</string>
+
 
     <!--Authentication-->
     <string name="signUpSuccess">Successfully created account with email %s.</string>
@@ -38,11 +51,17 @@
     <string name="loginSuccess">Successfully logged into account with email %s.</string>
     <string name="loginFailure">Could not log in. Account either does not exist or password was incorrect.</string>
 
+
     <!--Firestore Favourites-->
     <string name="getFavouriteStatusFailure">Failed to get favourite status of %s.</string>
     <string name="setFavouriteStatusFailure">Could not set favourite status for Pokemon %s.</string>
     <string name="getAllFavouritesFailure">Failed to retrieve all favourites.</string>
-    <string name="noFavourites">You currently do not have any favourites.""</string>
+    <string name="noFavourites">You currently do not have any favourites.</string>
+    <string name="emptyFields">Please fill in all fields.</string>
+    <string name="invalidEmail">Please enter a valid email.</string>
+    <string name="passwordTooShort">Password should be 6 characters or more.</string>
+    <string name="passwordTooLong">Password should be 24 characters or less.</string>
+    <string name="passwordsDoNotMatch">Password confirmation does not match password.</string>
 
     <!--PokeDataRepository-->
     <!--Something went wrong contexts-->
@@ -55,5 +74,18 @@
     <string name="emptyPokedexResults">Received empty Pokemon results.</string>
     <string name="noSearchResults">"Could not find any Pokemon with %s in name.</string>
     <string name="couldNotRetrieveEvolutionChain">Could not retrieve evolution chain.</string>
+
+    <!--Pokedex-->
+    <string name="lastPageReachedError">Attempted to get next page even though last page was already reached.</string>
+    <string name="tvSearchLabel">What Pokemon are you looking for?</string>
+    <string name="ivCloseDescription">Close</string>
+    <string name="tfSearchFieldHint">Name</string>
+    <string name="btnSearch">Search</string>
+    <string name="ivPokemonDetailDescription">Image of a Pokemon</string>
+    <string name="ivFavouriteButtonDescription">Favourite</string>
+    <string name="ivPokemonImageDescription">Image of a Pokemon</string>
+    <string name="ivHeaderLogoDescription">PokeData Logo</string>
+    <string name="action_view_favourites">Favourites</string>
+
 
 </resources>

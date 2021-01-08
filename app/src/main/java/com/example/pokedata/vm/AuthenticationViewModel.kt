@@ -6,6 +6,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.pokedata.App
+import com.example.pokedata.R
 import com.example.pokedata.firebase.Authentication
 import kotlinx.coroutines.launch
 
@@ -15,6 +17,7 @@ import kotlinx.coroutines.launch
  */
 class AuthenticationViewModel(application: Application) : AndroidViewModel(application) {
     private val authentication: Authentication = Authentication()
+    private val resources = App.getRes()
 
     val authenticationError: LiveData<String?> get() = authentication.error
 
@@ -67,19 +70,19 @@ class AuthenticationViewModel(application: Application) : AndroidViewModel(appli
     ): Boolean {
         println("$email, $password")
         if (email.isNullOrBlank() || password.isNullOrBlank()) {
-            _error.value = "Please fill in all fields."
+            _error.value = resources.getString(R.string.emptyFields)
             return false
         }
         if (!email.isEmailValid()) {
-            _error.value = "Please enter a valid email."
+            _error.value = resources.getString(R.string.invalidEmail)
             return false;
         }
         if (password.length < 6) {
-            _error.value = "Password should be 6 characters or more."
+            _error.value = resources.getString(R.string.passwordTooShort)
             return false
         }
         if (password.length > 24) {
-            _error.value = "Password should be 24 characters or less."
+            _error.value = resources.getString(R.string.passwordTooLong)
             return false
         }
         return true
@@ -97,7 +100,7 @@ class AuthenticationViewModel(application: Application) : AndroidViewModel(appli
             return false
         }
         if (passwordConfirm != password) {
-            _error.value = "Password confirmation does not match password."
+            _error.value = resources.getString(R.string.passwordsDoNotMatch)
             return false
         }
         return true

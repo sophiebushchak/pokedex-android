@@ -172,7 +172,9 @@ class PokeDexFragment : Fragment() {
         //Navigate to itself when a search is successfully done
         pokedexViewModel.searchComplete.observe(viewLifecycleOwner, {
             if (it) {
-                closeSearchMenu()
+                if (!searchModal.isGone) {
+                    closeSearchMenu()
+                }
                 findNavController().navigate(R.id.action_pokeDexFragment2_self)
             }
         })

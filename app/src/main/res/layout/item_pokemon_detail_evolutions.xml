@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="TextView"
+        android:text="@string/tvUndefined"
         app:layout_constraintEnd_toEndOf="@+id/ivEvolution1"
         app:layout_constraintStart_toStartOf="@+id/ivEvolution1"
         app:layout_constraintTop_toBottomOf="@+id/ivEvolution1" />
@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="TextView"
+        android:text="@string/tvUndefined"
         app:layout_constraintEnd_toEndOf="@+id/ivEvolution2"
         app:layout_constraintStart_toStartOf="@+id/ivEvolution2"
         app:layout_constraintTop_toBottomOf="@+id/ivEvolution2" />
@@ -30,7 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="TextView"
+        android:text="@string/tvUndefined"
         app:layout_constraintEnd_toEndOf="@+id/ivEvolution3"
         app:layout_constraintStart_toStartOf="@+id/ivEvolution3"
         app:layout_constraintTop_toBottomOf="@+id/ivEvolution3" />
@@ -44,7 +44,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_launcher_background" />
+        app:srcCompat="@drawable/ic_pokeball" />
 
     <ImageView
         android:id="@+id/ivEvolution2"
@@ -55,7 +55,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/ivArrowFirstEvolution"
         app:layout_constraintTop_toTopOf="@+id/ivArrowFirstEvolution"
-        app:srcCompat="@drawable/ic_launcher_background" />
+        app:srcCompat="@drawable/ic_pokeball" />
 
     <ImageView
         android:id="@+id/ivEvolution3"
@@ -66,7 +66,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/ivArrowSecondEvolution"
         app:layout_constraintTop_toTopOf="@+id/ivArrowSecondEvolution"
-        app:srcCompat="@drawable/ic_launcher_background" />
+        app:srcCompat="@drawable/ic_pokeball" />
 
     <ImageView
         android:id="@+id/ivArrowFirstEvolution"

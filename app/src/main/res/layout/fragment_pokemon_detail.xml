@@ -107,11 +107,12 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginStart="16dp"
+            android:contentDescription="@string/ivFavouriteButtonDescription"
             android:src="@drawable/ic_heart_outline"
-            android:tint="#FB9A9A"
             app:layout_constraintBottom_toBottomOf="@+id/tvPokemonDetailName"
             app:layout_constraintStart_toEndOf="@+id/tvPokemonDetailName"
-            app:layout_constraintTop_toTopOf="@+id/tvPokemonDetailName" />
+            app:layout_constraintTop_toTopOf="@+id/tvPokemonDetailName"
+            app:tint="#FB9A9A" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline4"
@@ -202,6 +203,7 @@
         android:id="@+id/ivPokemonDetail"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:contentDescription="@string/ivPokemonDetailDescription"
         android:elevation="4dp"
         app:layout_constraintBottom_toTopOf="@+id/imageBottom"
         app:layout_constraintEnd_toStartOf="@+id/guideline6"

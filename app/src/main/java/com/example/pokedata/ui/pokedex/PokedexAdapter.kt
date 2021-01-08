@@ -75,7 +75,10 @@ class PokedexAdapter(
             Glide.with(context).load(PokeDataApiConfig.HOST + pokemon.sprites.front)
                 .into(itemView.ivPokemonImage)
             itemView.tvPokemonName.text = pokemon.pokemonName
-            itemView.tvPokemonNumber.text = "#${pokemon.pokedexNumber.toString().padStart(3, '0')}"
+            itemView.tvPokemonNumber.text = context.getString(
+                R.string.pokedexNumber,
+                pokemon.pokedexNumber.toString().padStart(3, '0')
+            )
             itemView.tvPokemonType1.text = pokemon.primaryType.capitalize(Locale.ENGLISH)
             val primaryType = PokemonBasic.PokemonType.valueOf(pokemon.primaryType)
             itemView.tvPokemonType1.setBackgroundColor(
