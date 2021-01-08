@@ -1,12 +1,16 @@
 <resources>
     <string name="app_name">PokéData</string>
 
-    <string name="tvUndefined">/???</string>
-
     <!--Pokemon Detail Information-->
     <string name="tvHeightLabel">Height</string>
     <string name="tvWeightLabel">Weight</string>
     <string name="action_search">Search</string>
+    <string name="tvUndefined">/???</string>
+
+    <!--General errors-->
+    <string name="timedOutMessage">Could not connect to the server. Please check your internet connection.</string>
+    <string name="somethingWentWrong">Something went wrong.</string>
+    <string name="somethingWentWrongDuring">Something went wrong %s</string>
 
     <!--Splash Screen-->
     <string name="tvSplashTitle">PokéData</string>
@@ -22,8 +26,34 @@
     <string name="btnLogin">Log In</string>
     <string name="tvHaveAccount">Already have an account?</string>
     <string name="tvDontHaveAccount">Don\'t have an account?</string>
+
+    <!--Drawer-->
     <string name="pokedex">Pokédex</string>
     <string name="action_logout">Log Out</string>
     <string name="tvLoggedInAs">Logged in as:</string>
+
+    <!--Authentication-->
+    <string name="signUpSuccess">Successfully created account with email %s.</string>
+    <string name="signUpFailure">Could not create user. An account with this email possibly already exists.</string>
+    <string name="loginSuccess">Successfully logged into account with email %s.</string>
+    <string name="loginFailure">Could not log in. Account either does not exist or password was incorrect.</string>
+
+    <!--Firestore Favourites-->
+    <string name="getFavouriteStatusFailure">Failed to get favourite status of %s.</string>
+    <string name="setFavouriteStatusFailure">Could not set favourite status for Pokemon %s.</string>
+    <string name="getAllFavouritesFailure">Failed to retrieve all favourites.</string>
+    <string name="noFavourites">You currently do not have any favourites.""</string>
+
+    <!--PokeDataRepository-->
+    <!--Something went wrong contexts-->
+    <string name="contextRetrievePokemon"> while retrieving Pokemon.</string>
+    <string name="contextGettingTotalPokemonNumber"> while getting total number of Pokemon in the Pokedex.</string>
+    <string name="contextSearch"> during search.</string>
+    <string name="contextGettingPokemonByPokedexNumber"> while getting Pokemon by Pokedex number.</string>
+
+    <!--Errors-->
+    <string name="emptyPokedexResults">Received empty Pokemon results.</string>
+    <string name="noSearchResults">"Could not find any Pokemon with %s in name.</string>
+    <string name="couldNotRetrieveEvolutionChain">Could not retrieve evolution chain.</string>
 
 </resources>

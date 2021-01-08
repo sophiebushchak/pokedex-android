@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 class AuthenticationViewModel(application: Application) : AndroidViewModel(application) {
     private val authentication: Authentication = Authentication()
 
-    val authenticationError: LiveData<String> get() = authentication.error
+    val authenticationError: LiveData<String?> get() = authentication.error
 
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> get() = _error

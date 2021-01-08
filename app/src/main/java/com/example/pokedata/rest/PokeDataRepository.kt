@@ -1,6 +1,8 @@
 package com.example.pokedata.rest
 
 import android.content.Context
+import com.example.pokedata.App
+import com.example.pokedata.R
 import com.example.pokedata.models.PokemonBasic
 import com.example.pokedata.models.PokemonDetailed
 import com.example.pokedata.rest.response.PokemonEvolutionChain
@@ -11,6 +13,7 @@ import kotlinx.coroutines.withTimeout
  * Uses the [PokeDataService] to get various data through HTTP.
  */
 class PokeDataRepository(context: Context) {
+    private val resources = App.getRes()
 
     private val pokeDataService: PokeDataService = PokeDataApi(context).createApi()
 
@@ -24,14 +27,14 @@ class PokeDataRepository(context: Context) {
                 pokeDataService.getPokedexPaginated(offset, limit)
             }
             if (response.pokemon.isEmpty()) {
-                throw Error("Received empty results.")
+                throw Error(resources.getString(R.string.emptyPokedexResults))
             }
             pokemon.addAll(response.pokemon)
             return pokemon
         } catch (timedOutException: TimeoutCancellationException) {
             throw handleTimedOutException(timedOutException)
         } catch (error: Throwable) {
-            var message = "Something went wrong while retrieving Pokemon."
+            var message = resources.getString(R.string.somethingWentWrongDuring, resources.getString(R.string.contextRetrievePokemon))
             error.message?.let {
                 message = it
             }
@@ -51,7 +54,7 @@ class PokeDataRepository(context: Context) {
         } catch (timedOutException: TimeoutCancellationException) {
             throw handleTimedOutException(timedOutException)
         } catch (error: Throwable) {
-            var message = "Something went wrong while retrieving total Pokemon."
+            var message = resources.getString(R.string.somethingWentWrongDuring, resources.getString(R.string.contextGettingTotalPokemonNumber))
             error.message?.let {
                 message = it
             }
@@ -69,14 +72,14 @@ class PokeDataRepository(context: Context) {
                 pokeDataService.getPokedexWithSearch(nameSearchString)
             }
             if (response.pokemon.isEmpty()) {
-                throw Error("Could not find any Pokemon with $nameSearchString in name.")
+                throw Error(resources.getString(R.string.noSearchResults, nameSearchString))
             }
             pokemon.addAll(response.pokemon)
             return pokemon
         } catch (timedOutException: TimeoutCancellationException) {
             throw handleTimedOutException(timedOutException)
         } catch (error: Throwable) {
-            var message = "Something went wrong during search."
+            var message = resources.getString(R.string.somethingWentWrongDuring, resources.getString(R.string.contextSearch))
             error.message?.let {
                 message = it
             }
@@ -92,14 +95,14 @@ class PokeDataRepository(context: Context) {
             val response = withTimeout(5_000) {
                 pokeDataService.getPokemonByPokedexNumber(pokedexNumber)
             }
-            if (response.statusCode == 404 || response.pokemon == null) {
+            if (response.statusCode == 404) {
                 throw Error(response.message)
             }
             return response.pokemon
         } catch (timedOutException: TimeoutCancellationException) {
             throw handleTimedOutException(timedOutException)
         } catch (error: Throwable) {
-            var message = "Something went wrong while getting Pokemon by Pokedex number"
+            var message = resources.getString(R.string.somethingWentWrongDuring, resources.getString(R.string.contextGettingPokemonByPokedexNumber))
             error.message?.let {
                 message = it
             }
@@ -118,7 +121,7 @@ class PokeDataRepository(context: Context) {
         } catch (timedOutException: TimeoutCancellationException) {
             throw handleTimedOutException(timedOutException)
         } catch (error: Throwable) {
-            var message = "Could not retrieve evolution chain."
+            var message = resources.getString(R.string.couldNotRetrieveEvolutionChain)
             error.message?.let {
                 message = it
             }
@@ -128,7 +131,7 @@ class PokeDataRepository(context: Context) {
 
     private fun handleTimedOutException(exception: TimeoutCancellationException): PokeDataRepositoryException {
         return PokeDataRepositoryException(
-            "Could not connect to the server. Please check your internet connection.",
+            resources.getString(R.string.timedOutMessage),
             exception
         )
     }

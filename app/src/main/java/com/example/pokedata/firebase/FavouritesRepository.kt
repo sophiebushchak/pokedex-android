@@ -3,16 +3,11 @@ package com.example.pokedata.firebase
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.android.gms.tasks.Tasks
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.DocumentSnapshot
+import com.example.pokedata.App
+import com.example.pokedata.R
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.TimeoutCancellationException
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withTimeout
 import java.lang.Exception
@@ -21,6 +16,7 @@ class FavouritesRepository {
     private val TAG: String = "FirestoreFavourites"
     private val firestore = Firebase.firestore
     private val authentication = Authentication()
+    private val resources = App.getRes()
 
     private val _favouriteStatus = MutableLiveData<Pair<String, Boolean>?>()
     val favouriteStatus: LiveData<Pair<String, Boolean>?> get() = _favouriteStatus
@@ -61,20 +57,16 @@ class FavouritesRepository {
                     }
                     .addOnFailureListener { exception ->
                         Log.e(TAG, "Failed to get document with exception", exception)
-                        throw FavouritesRepositoryException("Something went wrong.", exception)
+                        throw FavouritesRepositoryException(resources.getString(R.string.somethingWentWrong), exception)
                     }
             }
         } catch (timedOutException: TimeoutCancellationException) {
             throw FavouritesRepositoryException(
-                "Could not connect to the server. Please check your internet connection.",
+                resources.getString(R.string.timedOutMessage),
                 timedOutException
             )
         } catch (error: Throwable) {
-            println(error)
-            throw FavouritesRepositoryException(
-                "Could not get favourite status for Pokemon $pokemonName",
-                error
-            )
+            throw buildException(resources.getString(R.string.getFavouriteStatusFailure, pokemonName), error)
         }
     }
 
@@ -94,18 +86,18 @@ class FavouritesRepository {
                     _favouriteSuccess.value = null
                 }.addOnFailureListener { exception ->
                     Log.e(TAG, "Failed to set favourite status with exception", exception)
-                    throw FavouritesRepositoryException("Something went wrong.", exception)
+                    throw FavouritesRepositoryException(resources.getString(R.string.somethingWentWrong), exception)
                 }
             }
         } catch (timedOutException: TimeoutCancellationException) {
             throw FavouritesRepositoryException(
-                "Could not connect to the server. Please check your internet connection.",
+                resources.getString(R.string.timedOutMessage),
                 timedOutException
             )
         } catch (error: Throwable) {
             println(error)
-            throw FavouritesRepositoryException(
-                "Could not set favourite status for Pokemon $pokemonName.",
+            throw buildException(
+                resources.getString(R.string.setFavouriteStatusFailure, pokemonName),
                 error
             )
         }
@@ -122,20 +114,30 @@ class FavouritesRepository {
             val result = withTimeout(5_000) {
                 userCollection.get().await()
             }
+            if (result.size() < 1) {
+                throw Exception(resources.getString(R.string.noFavourites))
+            }
             result.map { documentSnapshot ->
                 Pair(documentSnapshot.id, documentSnapshot.data["isFavourite"])
             } as List<Pair<String, Boolean>>
         } catch (timedOutException: TimeoutCancellationException) {
             throw FavouritesRepositoryException(
-                "Could not connect to the server. Please check your internet connection.",
+                resources.getString(R.string.timedOutMessage),
                 timedOutException
             )
         } catch (error: Throwable) {
             println(error)
-            throw FavouritesRepositoryException("Could not get all favourites.", error)
+            throw buildException(resources.getString(R.string.getAllFavouritesFailure), error)
         }
     }
 
+    private fun buildException(defaultMessage: String, cause: Throwable): FavouritesRepositoryException {
+        var message: String = defaultMessage
+        cause.message?.let{
+            message = it
+        }
+        return FavouritesRepositoryException(message, cause)
+    }
 
     inner class FavouritesRepositoryException(message: String, cause: Throwable) :
         Throwable(message, cause)
