@@ -14,7 +14,7 @@ import com.bumptech.glide.Glide
 import com.example.pokedata.R
 import com.example.pokedata.models.PokemonBasic
 import com.example.pokedata.models.PokemonDetailed
-import com.example.pokedata.rest.PokeApiConfig
+import com.example.pokedata.rest.PokeDataApiConfig
 import com.example.pokedata.vm.PokemonDetailViewModel
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
@@ -23,7 +23,7 @@ import kotlinx.android.synthetic.main.fragment_pokemon_detail.*
 import java.util.*
 
 /**
- * A simple [Fragment] subclass as the second destination in the navigation.
+ * Fragment for displaying detailed information about a Pokemon
  */
 class PokemonDetailFragment : Fragment() {
     private val TAG = "PokemonDetailFragment"
@@ -41,6 +41,7 @@ class PokemonDetailFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_pokemon_detail, container, false)
     }
 
+    //Observe LiveData and set up ViewPager2 with adapter
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observePokemon()
@@ -51,8 +52,9 @@ class PokemonDetailFragment : Fragment() {
         viewPager.adapter = pokemonDetailAdapter
         tabLayout = pokemonDetailTabLayout
         //Always 2 same tabs
+        val FIRST_TAB_POSITION = 0;
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            if (position == 0) {
+            if (position == FIRST_TAB_POSITION) {
                 tab.text = "Info"
             } else {
                 tab.text = "Evolution"
@@ -60,6 +62,7 @@ class PokemonDetailFragment : Fragment() {
         }.attach()
     }
 
+    //Update the information shown on the upper part of the Fragment
     private fun updatePokemonInformation(pokemon: PokemonDetailed) {
         this.showShiny = false
         val context = requireContext()
@@ -102,6 +105,8 @@ class PokemonDetailFragment : Fragment() {
         actionBar?.title = pokemon.pokemonName
     }
 
+    //Update resource of the favourite button and sets a new click listener on it that will make the
+    //next click set the favourite status to the opposite of what it was on.
     private fun updateFavouriteButton(pokemonName: String, isFavourite: Boolean) {
         if (isFavourite) {
             ivFavouriteButton.setImageResource(R.drawable.ic_heart)
@@ -113,11 +118,12 @@ class PokemonDetailFragment : Fragment() {
         }
     }
 
+    //Switch from normal to shiny sprite and back.
     private fun switchSprite(pokemon: PokemonDetailed) {
         if (!this.showShiny) {
-            Glide.with(requireContext()).load(PokeApiConfig.HOST + pokemon.sprites.front).into(ivPokemonDetail)
+            Glide.with(requireContext()).load(PokeDataApiConfig.HOST + pokemon.sprites.front).into(ivPokemonDetail)
         } else {
-            Glide.with(requireContext()).load(PokeApiConfig.HOST + pokemon.sprites.frontShiny).into(ivPokemonDetail)
+            Glide.with(requireContext()).load(PokeDataApiConfig.HOST + pokemon.sprites.frontShiny).into(ivPokemonDetail)
         }
     }
 
@@ -154,6 +160,7 @@ class PokemonDetailFragment : Fragment() {
             if (it != null) {
                 Log.d(TAG, "Clicked on evolution in evolution chain with Pokedex number: $it")
                 viewModel.getPokemonDetailed(it)
+                //Go back to information tab
                 tabLayout.selectTab(tabLayout.getTabAt(0))
             }
         })

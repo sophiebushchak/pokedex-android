@@ -11,7 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
  * of the screen right now or not. It can for example not be called while resources are already
  * being loaded.
  */
-class EndlessRecyclerViewScroll(private val onReachBottom: () -> Unit, var canCall: Boolean): RecyclerView.OnScrollListener() {
+class EndlessRecyclerViewScroll(private val onReachBottom: () -> Unit, var canCall: Boolean) :
+    RecyclerView.OnScrollListener() {
     @Override
     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
         super.onScrolled(recyclerView, dx, dy)

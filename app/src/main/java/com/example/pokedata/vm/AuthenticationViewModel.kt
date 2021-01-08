@@ -9,6 +9,10 @@ import androidx.lifecycle.viewModelScope
 import com.example.pokedata.firebase.Authentication
 import kotlinx.coroutines.launch
 
+/**
+ * ViewModel for authentication related functionality. This is used on the SplashFragment and
+ * LoginFragment.
+ */
 class AuthenticationViewModel(application: Application) : AndroidViewModel(application) {
     private val authentication: Authentication = Authentication()
 
@@ -22,6 +26,10 @@ class AuthenticationViewModel(application: Application) : AndroidViewModel(appli
     val loginSuccess: LiveData<String?> get() = authentication.loginSuccess
     val createUserSuccess: LiveData<String?> get() = authentication.createUserSuccess
 
+    /**
+     *  Attempt to log in a user. No LiveData values are set because the [Authentication] class already
+     *  emits LiveData values.
+     */
     fun loginUser(email: String, password: String) {
         viewModelScope.launch {
             try {
@@ -34,6 +42,10 @@ class AuthenticationViewModel(application: Application) : AndroidViewModel(appli
         }
     }
 
+    /**
+     *  Attempt to sign in a user. No LiveData values are set because the [Authentication] class already
+     *  emits LiveData values.
+     */
     fun createUser(email: String, password: String, passwordConfirm: String) {
         viewModelScope.launch {
             try {
@@ -46,6 +58,9 @@ class AuthenticationViewModel(application: Application) : AndroidViewModel(appli
         }
     }
 
+    /**
+     * Validate the login form fields and notify the user of an error.
+     */
     private fun validateFieldsLogin(
         email: String?,
         password: String?,
@@ -70,7 +85,14 @@ class AuthenticationViewModel(application: Application) : AndroidViewModel(appli
         return true
     }
 
-    private fun validateFieldsSignup(email: String?, password: String?, passwordConfirm: String?): Boolean {
+    /**
+     * Use standard login validation but also validate if the password confirm matches the password
+     */
+    private fun validateFieldsSignup(
+        email: String?,
+        password: String?,
+        passwordConfirm: String?
+    ): Boolean {
         if (!validateFieldsLogin(email, password)) {
             return false
         }
@@ -81,6 +103,9 @@ class AuthenticationViewModel(application: Application) : AndroidViewModel(appli
         return true
     }
 
+    /**
+     * Extension function to check if a valid email was entered.
+     */
     private fun String.isEmailValid(): Boolean {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(this).matches()
     }

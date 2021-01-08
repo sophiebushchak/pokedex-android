@@ -10,24 +10,28 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.pokedata.R
 import com.example.pokedata.models.PokemonDetailed
-import com.example.pokedata.rest.PokeApiConfig
+import com.example.pokedata.rest.PokeDataApiConfig
 import com.example.pokedata.rest.response.PokemonEvolutionChain
 import kotlinx.android.synthetic.main.item_pokemon_detail_evolutions.view.*
 import kotlinx.android.synthetic.main.item_pokemon_detail_information.view.*
 
 class PokemonDetailAdapter(var pokemon: PokemonDetailed?, var evolutionChain: PokemonEvolutionChain?) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    private val TAB_COUNT = 2;
 
+    //LiveData for clicking on a Pokemon evolution
     private val _pokemonEvolutionSelected = MutableLiveData<Int>()
     val pokemonEvolutionSelected: LiveData<Int> get() = _pokemonEvolutionSelected
 
+    //Inflate ViewHolder depending on position
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             0 -> PokemonInfoViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_pokemon_detail_information, parent, false))
             1 -> PokemonEvolutionsViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_pokemon_detail_evolutions, parent, false))
-            else -> throw Error("Invalid viewType")
+            else -> throw Error("Invalid position")
         }
     }
 
+    //Set the ViewHolder to be either of two ViewHolders and databind it
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder.itemViewType) {
             0 -> {
@@ -41,10 +45,12 @@ class PokemonDetailAdapter(var pokemon: PokemonDetailed?, var evolutionChain: Po
         }
     }
 
+    //There are always 2 tabs
     override fun getItemCount(): Int {
-        return 2;
+        return TAB_COUNT;
     }
 
+    //The View is dependent on what tab the user is on.
     override fun getItemViewType(position: Int): Int {
         return position
     }
@@ -62,7 +68,7 @@ class PokemonDetailAdapter(var pokemon: PokemonDetailed?, var evolutionChain: Po
             chain.first?.let{
                 val pokemon = it
                 itemView.tvEvolution1.text = pokemon.pokemonName
-                Glide.with(itemView.context).load(PokeApiConfig.HOST + pokemon.sprites.front).into(itemView.ivEvolution1)
+                Glide.with(itemView.context).load(PokeDataApiConfig.HOST + pokemon.sprites.front).into(itemView.ivEvolution1)
                 itemView.ivEvolution1.setOnClickListener {
                     _pokemonEvolutionSelected.value = pokemon.pokedexNumber
                 }
@@ -73,7 +79,7 @@ class PokemonDetailAdapter(var pokemon: PokemonDetailed?, var evolutionChain: Po
                 itemView.tvEvolution2.text = it.pokemonName
                 itemView.ivArrowFirstEvolution.isGone = false;
                 itemView.ivEvolution2.isGone = false;
-                Glide.with(itemView.context).load(PokeApiConfig.HOST + it.sprites.front).into(itemView.ivEvolution2)
+                Glide.with(itemView.context).load(PokeDataApiConfig.HOST + it.sprites.front).into(itemView.ivEvolution2)
                 itemView.ivEvolution2.setOnClickListener {
                     _pokemonEvolutionSelected.value = pokemon.pokedexNumber
                 }
@@ -88,7 +94,7 @@ class PokemonDetailAdapter(var pokemon: PokemonDetailed?, var evolutionChain: Po
                 itemView.tvEvolution3.text = it.pokemonName
                 itemView.ivArrowSecondEvolution.isGone = false;
                 itemView.ivEvolution3.isGone = false;
-                Glide.with(itemView.context).load(PokeApiConfig.HOST + it.sprites.front).into(itemView.ivEvolution3)
+                Glide.with(itemView.context).load(PokeDataApiConfig.HOST + it.sprites.front).into(itemView.ivEvolution3)
                 itemView.ivEvolution3.setOnClickListener {
                     _pokemonEvolutionSelected.value = pokemon.pokedexNumber
                 }

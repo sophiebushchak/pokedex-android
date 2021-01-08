@@ -8,7 +8,10 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface PokeApiService {
+/**
+ * Define HTTP requests for the PokeData back end
+ */
+interface PokeDataService {
     @GET("pokedex")
     suspend fun getPokedexPaginated(
         @Query("offset") offset: Int,

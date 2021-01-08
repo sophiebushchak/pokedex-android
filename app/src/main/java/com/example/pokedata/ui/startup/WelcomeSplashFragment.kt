@@ -45,6 +45,10 @@ class WelcomeSplashFragment : Fragment() {
         (requireActivity() as AppCompatActivity).supportActionBar?.show()
     }
 
+    /**
+     * Navigate to either the Pokedex screen or the Login/Signup screen depending on whether the
+     * user is logged in.
+     */
     private fun observeLoggedInStatus() {
         viewModel.isLoggedIn.observe(viewLifecycleOwner, {
             Log.d(TAG, "login status: $it")

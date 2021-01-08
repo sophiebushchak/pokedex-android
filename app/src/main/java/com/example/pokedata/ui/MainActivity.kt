@@ -47,6 +47,7 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+        //Add logic to actions on the drawer.
         navView.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.action_logout -> {
@@ -58,6 +59,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+        //If going to the pokedex destination, update the header email address.
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.pokedex -> {
@@ -66,6 +68,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
         updateHeaderEmail()
+        //When auth state changes, automatically navigate to the splash screen.
         auth.authentication.addAuthStateListener { auth ->
             println(auth)
             updateHeaderEmail()
@@ -76,7 +79,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
+    //Up navigation on non-top-level fragments
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()

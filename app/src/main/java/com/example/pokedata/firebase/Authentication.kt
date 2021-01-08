@@ -31,17 +31,26 @@ class Authentication {
     private val _loginSuccess = MutableLiveData<String?>()
     val loginSuccess: LiveData<String?> get() = _loginSuccess
 
+    /**
+     * Emit livedata when the auth state is changed.
+     */
     init {
         authentication.addAuthStateListener {
             _loginStatus.value = isLoggedIn()
         }
     }
 
+    /**
+     * Check if a logged in user exists
+     */
     fun isLoggedIn(): Boolean {
         val user = authentication.currentUser
         return user != null
     }
 
+    /**
+     * Attempt to sign up a user by email and password.
+     */
     fun createUser(email: String, password: String) {
         authentication.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
@@ -57,6 +66,9 @@ class Authentication {
             }
     }
 
+    /**
+     * Attempt to log in a user by email and password
+     */
     fun loginUser(email: String, password: String) {
         authentication.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
@@ -72,6 +84,9 @@ class Authentication {
             }
     }
 
+    /**
+     * Return information about currently logged in user
+     */
     fun getCurrentUser(): FirebaseUser? {
         if (!isLoggedIn()) {
             return null
@@ -81,9 +96,10 @@ class Authentication {
         }
     }
 
+    /**
+     * Sign out through firebase signout method, which also triggers an auth state changed event
+     */
     fun signOut() {
         authentication.signOut()
     }
-
-    inner class AuthenticationException(message: String) : Exception(message)
 }

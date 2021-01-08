@@ -61,11 +61,17 @@ class LoginFragment : Fragment() {
         updateViews(this.isLoginMode)
     }
 
+    /**
+     * Switch form mode to log in mode or sign up mode.
+     */
     private fun switchMode() {
         this.isLoginMode = !this.isLoginMode
         updateViews(this.isLoginMode)
     }
 
+    /**
+     * Update the form views to reflect logging in or signing up
+     */
     private fun updateViews(isLoginMode: Boolean) {
         if (isLoginMode) {
             tfSignUpPasswordConfirm.isGone = true;
@@ -87,6 +93,9 @@ class LoginFragment : Fragment() {
         }
     }
 
+    /**
+     * Attempt to sign up through the ViewModel
+     */
     private fun attemptSignUp() {
         viewModel.createUser(
             etSignUpEmail.text.toString(),
@@ -95,21 +104,27 @@ class LoginFragment : Fragment() {
         )
     }
 
+    /**
+     * Attempt to log in through the ViewModel
+     */
     private fun attemptLogin() {
         viewModel.loginUser(etSignUpEmail.text.toString(), etSignUpPassword.text.toString())
     }
 
     private fun observeAuthentication() {
+        //Error related to firebase rather than a user error
         viewModel.authenticationError.observe(viewLifecycleOwner, {
             if (!it.isNullOrBlank()) {
                 notify(it)
             }
         })
+        //Some kind of form error
         viewModel.error.observe(viewLifecycleOwner, {
             if (!it.isNullOrBlank()) {
                 notify(it)
             }
         })
+        //Continue to next screen when logged in
         viewModel.loginSuccess.observe(viewLifecycleOwner, {
             if (!it.isNullOrBlank()) {
                 continueAfterAuthentication()

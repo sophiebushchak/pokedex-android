@@ -11,6 +11,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withTimeout
@@ -27,6 +28,9 @@ class FavouritesRepository {
     private val _favouriteSuccess = MutableLiveData<Pair<String, Boolean>?>()
     val favourited: LiveData<Pair<String, Boolean>?> get() = _favouriteSuccess
 
+    /**
+     * Access firestore and get the favourite status of a particular Pokemon by name.
+     */
     suspend fun getFavouriteStatus(pokemonName: String) {
         try {
             val user = authentication.getCurrentUser() ?: throw Exception("Not logged in.")
@@ -57,8 +61,14 @@ class FavouritesRepository {
                     }
                     .addOnFailureListener { exception ->
                         Log.e(TAG, "Failed to get document with exception", exception)
+                        throw FavouritesRepositoryException("Something went wrong.", exception)
                     }
             }
+        } catch (timedOutException: TimeoutCancellationException) {
+            throw FavouritesRepositoryException(
+                "Could not connect to the server. Please check your internet connection.",
+                timedOutException
+            )
         } catch (error: Throwable) {
             println(error)
             throw FavouritesRepositoryException(
@@ -68,6 +78,9 @@ class FavouritesRepository {
         }
     }
 
+    /**
+     * Sets the favourite status of a particular Pokemon to true or false.
+     */
     suspend fun setFavouriteStatus(pokemonName: String, isFavourite: Boolean) {
         try {
             val user = authentication.getCurrentUser() ?: throw Exception("Not logged in.")
@@ -79,8 +92,16 @@ class FavouritesRepository {
                 ).addOnSuccessListener { _ ->
                     _favouriteSuccess.value = Pair(pokemonName, isFavourite)
                     _favouriteSuccess.value = null
+                }.addOnFailureListener { exception ->
+                    Log.e(TAG, "Failed to set favourite status with exception", exception)
+                    throw FavouritesRepositoryException("Something went wrong.", exception)
                 }
             }
+        } catch (timedOutException: TimeoutCancellationException) {
+            throw FavouritesRepositoryException(
+                "Could not connect to the server. Please check your internet connection.",
+                timedOutException
+            )
         } catch (error: Throwable) {
             println(error)
             throw FavouritesRepositoryException(
@@ -90,6 +111,10 @@ class FavouritesRepository {
         }
     }
 
+    /**
+     * Retrieves a list of pairs of Pokemon names and a boolean which indicates whether a Pokemon
+     * has been favourited.
+     */
     suspend fun getListOfAllFavouritesByName(): List<Pair<String, Boolean>> {
         return try {
             val user = authentication.getCurrentUser() ?: throw Exception("Not logged in.")
@@ -100,11 +125,17 @@ class FavouritesRepository {
             result.map { documentSnapshot ->
                 Pair(documentSnapshot.id, documentSnapshot.data["isFavourite"])
             } as List<Pair<String, Boolean>>
+        } catch (timedOutException: TimeoutCancellationException) {
+            throw FavouritesRepositoryException(
+                "Could not connect to the server. Please check your internet connection.",
+                timedOutException
+            )
         } catch (error: Throwable) {
             println(error)
             throw FavouritesRepositoryException("Could not get all favourites.", error)
         }
     }
+
 
     inner class FavouritesRepositoryException(message: String, cause: Throwable) :
         Throwable(message, cause)
