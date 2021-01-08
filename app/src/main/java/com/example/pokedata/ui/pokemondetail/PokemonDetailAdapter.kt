@@ -69,9 +69,9 @@ class PokemonDetailAdapter(
     inner class PokemonInfoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun databind(pokemon: PokemonDetailed) {
             itemView.tvHeightValue.text =
-                resources.getString(R.string.tvHeightValue, pokemon.height.toDouble() / 10)
+                resources.getString(R.string.tvHeightValue, (pokemon.height.toDouble() / 10).toString())
             itemView.tvWeightValue.text =
-                resources.getString(R.string.tvWeightValue, pokemon.weight.toDouble() / 10)
+                resources.getString(R.string.tvWeightValue, (pokemon.weight.toDouble() / 10).toString())
             itemView.tvPokedexEntry.text = pokemon.pokedexEntryDescription.replace("\n", " ")
         }
     }

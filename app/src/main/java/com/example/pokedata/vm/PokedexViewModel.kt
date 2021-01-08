@@ -144,7 +144,7 @@ class PokedexViewModel(application: Application) : AndroidViewModel(application)
                     pokemonLoaded.push(Pair(PokedexStatus.Favourites, pokemonList))
                     _pokemonOnPage.value = pokemonList
                 } else {
-                    _error.value = resources.getString(R.string.noFavourites)
+                    notifyError(resources.getString(R.string.noFavourites))
                 }
                 _searchComplete.value = true
                 _searchComplete.value = false
@@ -182,7 +182,11 @@ class PokedexViewModel(application: Application) : AndroidViewModel(application)
     }
 
     private fun notifyError(message: String?) {
-        _error.value = message
+        if (!message.isNullOrBlank()) {
+            _error.value = message
+        } else {
+            _error.value = resources.getString(R.string.somethingWentWrong)
+        }
         _error.value = ""
     }
 
