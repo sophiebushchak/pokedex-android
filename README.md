@@ -23,7 +23,7 @@ Opening it in Android Studio should make Gradle download all dependencies.
 
 Once the project has been opened in Android Studio, find PokeDataApiConfig in the "rest" package. Here, you can alter the host and base url of the back-end that the application will connect to. To run the application on a mobile phone, you will probably need to port-forward and use your external IP here.
 
-###Firebase
+### Firebase
 Because the application uses Firebase for registering and login, a simple Firebase project must be set up for it to work. 
 
 To create one, click on "Create a project". Then, once you are on the dashboard, you should be able to register an application. 
